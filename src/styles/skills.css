@@ -1,0 +1,10 @@
+.other {
+  margin: 10px 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}

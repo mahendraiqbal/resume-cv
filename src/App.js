@@ -1,7 +1,11 @@
 import './styles/app.css';
 import React, { Component } from 'react';
-import Overview from './components/Overview';
 import uniqid from 'uniqid';
+import Header from './components/Header';
+import Education from './components/Education'; 
+import Experience from './components/Experience';
+import Skills from './components/Skills';
+import Footer from './components/Footer';
 
 export default class App extends Component {
   constructor() {
@@ -11,8 +15,12 @@ export default class App extends Component {
 
   render() {
     return (
-      <div>
-        
+      <div className='container shadow'>
+        <Header />
+        <Education />
+        <Experience />
+        <Skills />
+        <Footer />
       </div>
     );
   }

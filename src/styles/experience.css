@@ -1,0 +1,29 @@
+.experience {
+  margin: 10px 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.description {
+  grid-column: 1 / -1;
+  margin: 0px 0px 25px 20px;
+  font-size: 15px;
+}
+
+hr {
+  width: 100%;
+}
+
+.dates {
+  text-align: right;
+}
+
+.content-info {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
