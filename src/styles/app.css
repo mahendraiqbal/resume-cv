@@ -18,10 +18,8 @@
 body {
   background-color: var(--main-background-color);
   color: var(--main-font-color);
-  /* font-size: 14px; */
   line-height: 1.5;
   /* user-select: none; */
-
 }
 
 a {
@@ -39,7 +37,7 @@ input {
   border: inherit;
   outline: none;
   color: var(--main-font-color);
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .shadow {
@@ -54,4 +52,8 @@ input {
   margin: 25px auto;
   background-color: var(--card-background-color);
   border-radius: 4px;
+}
+
+.hidden {
+  display: none;
 }

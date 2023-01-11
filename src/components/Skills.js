@@ -14,21 +14,15 @@ export default class Skills extends Component {
       <div className="other">
         <SectionHeader header="Skills" />
         <div className="skill-content">
-          <div className="languages">Languages: English and Spanish</div>
+          <div className="languages">Languages: {this.props.languages}</div>
           <div className="skills">
-            Skills: Advanced Microsoft Excel, Adobe Photoshop, Adobe
-            Illustrator, BambooHR, Zendesk, Insuresign
+            Skills: {this.props.skills}
           </div>
           <div className="interests">
-            Interests: Lacrosse, Weightlifting, Music, Thrifting, Soccer, Road
-            tripping
+            Interests: {this.props.interests}
           </div>
         </div>
       </div>
     );
   }
 }
-
-// Languages: Conversational Spanish, English, Python, C++
-// Skills: Advanced Microsoft Excel, Adobe Photoshop, Adobe Illustrator, BambooHR, Zendesk, Insuresign
-// Interests: Lacrosse, Weightlifting, Music, Thrifting, Soccer, Road tripping
