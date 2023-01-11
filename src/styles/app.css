@@ -52,6 +52,7 @@ input {
   margin: 25px auto;
   background-color: var(--card-background-color);
   border-radius: 4px;
+  padding: 0px 50px;
 }
 
 .hidden {

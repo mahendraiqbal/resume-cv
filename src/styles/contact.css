@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20px;
+  margin: 20px 0px;
 }
 
 #infoContainer>.secondSection {
@@ -16,7 +16,6 @@
   gap: 20px;
   grid-template-columns: 3fr 2fr;
   align-items: center;
-  width: 90%;
 }
 
 .name>*,

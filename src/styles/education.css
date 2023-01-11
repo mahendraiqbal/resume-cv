@@ -1,10 +1,10 @@
- .education {
-   margin: 10px 50px;
+ .educationContainer {
+   margin: 10px 0px;
    display: flex;
    flex-direction: column;
  }
 
- .content {
+ .educationContainer>.firstSection {
    display: grid;
    grid-template-columns: 3fr 1fr;
  }
@@ -16,15 +16,13 @@
    font-size: 15px;
  }
 
- hr {
-   width: 100%;
- }
+
 
  .dates {
   text-align: right;
 }
 
-.content-info {
+.contentInfo {
   display: grid;
   grid-template-columns: 2fr 1fr;
 }
