@@ -1,17 +1,126 @@
 import React, { Component } from 'react';
-import '../styles/footer.css'
+import '../styles/contact.css';
+import accountEdit from '../assets/account-edit.svg';
+import submitIcon from '../assets/checkbox-marked.svg';
 
-export default class Footer extends Component {
+export default class Contact extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    // state to control wether editing or viewing
+    this.state = {
+      editing: true,
+      editButtonClassName: 'hidden',
+      name: '',
+      phone: '',
+      email: '',
+      linkedin: '',
+    };
   }
 
-  render() {
-    return (
-      <div className="">
+  showIcon = () => {
+    this.setState({
+      editButtonClassName: 'editButton',
+    });
+  };
 
+  hideIcon = () => {
+    this.setState({
+      editButtonClassName: 'hidden',
+    });
+  };
+
+  changeEditingState = (e) => {
+    e.preventDefault();
+    this.setState({
+      editing: !this.state.editing,
+    });
+  };
+
+  changeNameInput = (e) =>
+    this.setState({
+      name: e.target.value,
+    });
+
+  changePhoneInput = (e) =>
+    this.setState({
+      phone: e.target.value,
+    });
+
+  changeEmailInput = (e) =>
+    this.setState({
+      email: e.target.value,
+    });
+
+  changeLinkedinInput = (e) =>
+    this.setState({
+      linkedin: e.target.value,
+    });
+
+  render() {
+    return this.state.editing ? (
+      <form id="infoContainer" onSubmit={this.changeEditingState}>
+        <div className="firstSection">
+          <div className="name">
+            <label htmlFor="nameInput">Name:</label>
+            <input
+              id="nameInput"
+              placeholder="Enter your name here..."
+              onChange={this.changeNameInput}
+              value={this.state.name}
+              required={true}
+            />
+          </div>
+          <button type="submit" className="submitButton">
+            <img
+              className="submitButton"
+              src={submitIcon}
+              alt="create account button"
+            />
+          </button>
+        </div>
+        <div className="secondSection">
+          <label htmlFor="phoneInput">Phone Number:</label>
+          <input
+            id="phoneInput"
+            placeholder="Phone here..."
+            onChange={this.changePhoneInput}
+            value={this.state.phone}
+          />
+          <label htmlFor="emailInput">Email:</label>
+          <input
+            id="emailInput"
+            placeholder="Email here..."
+            onChange={this.changeEmailInput}
+            value={this.state.email}
+          />
+          <label htmlFor="linkedinInput">LinkedIn:</label>
+          <input
+            id="linkedinInput"
+            placeholder="LinkedIn here..."
+            onChange={this.changeLinkedinInput}
+            value={this.state.linkedin}
+          />
+        </div>
+      </form>
+    ) : (
+      <div
+        id="infoContainer"
+        onMouseEnter={this.showIcon}
+        onMouseLeave={this.hideIcon}
+      >
+        <div className="name">{this.state.name}</div>
+        <div className="secondSection display">
+          {this.state.phone && <div>{this.state.phone}</div>}
+          {this.state.email && <div>{this.state.email}</div>}
+          {this.state.linkedin && <div>{this.state.linkedin}</div>}
+        </div>
+        <button className={this.state.editButtonClassName}>
+          <img
+            className={this.state.editButtonClassName}
+            src={accountEdit}
+            alt="create account button"
+            onClick={this.changeEditingState}
+          />
+        </button>
       </div>
     );
   }

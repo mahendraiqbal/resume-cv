@@ -1,41 +1,11 @@
 # Cv Project
 
-Header
+Next
 
-- name
-- address
-- phone
-- email
-- linkedin
+- delete icons not hovering properly
 
-Education
+Eventually
 
-- School
-- dates
-- degree
-- relevant coursework (optional)
-- Ativities and societies
-
-Experience
-
-- Job Title
-- company
-- dates
-- desc
-
-Leadership and Involvement
-
-- Job Title
-- company
-- dates
-- desc
-
-Skills
-
-- Languages
-- Skills
-- Interests
-
-Notes
-
-- everything needs an edit and submit button
+- make actual container more responsive to content size ie add a second page?? like responsive that way
+- on preview the edit buttons should be hoverable
+- clean up jsx + css

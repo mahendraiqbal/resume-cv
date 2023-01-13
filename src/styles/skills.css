@@ -1,10 +1,26 @@
-.other {
-  margin: 10px 0px;
+#skillForm,
+.skillsContent {
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
+  /* gap: 5px; */
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
+.categoryRow {
+  display: grid;
+  grid-template-columns: 1fr 20px;
+}
+
+.categoryContent {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 5px;
+}
+
+#newCategoryNameInput {
+  width: 100%;
+}
+
+#submitBtnLabel {
+  display: none;
 }
