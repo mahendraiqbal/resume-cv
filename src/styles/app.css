@@ -49,6 +49,10 @@ input {
   display: none;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 /* Icons */
 button,
 img {
@@ -83,13 +87,17 @@ img:hover {
 .firstSection {
   display: grid;
   gap: 20px;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 1fr auto;
   align-items: center;
 }
 
 /* Section Header Stuff */
-.header,
-.header>div {
+.header {
+  height: 32px;
+}
+
+.headerTitle,
+.headerTitle>div {
   text-align: left;
   font-size: 18px;
   display: flex;

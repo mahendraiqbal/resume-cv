@@ -1,16 +1,15 @@
-#infoContainer {
+#info {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
 }
 
-#infoContainer>.secondSection {
+#info>.secondSection {
   display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: auto auto auto;
 }
-
-
 
 .name>*,
 .name {
@@ -27,17 +26,20 @@
 }
 
 .submitButton,
-.editButton {
+.submitButton>img, .editButton {
   height: 32px;
   justify-self: end;
 }
 
-
-
-form>.secondSection {
+form>.secondSection, .secondSection>div {
   gap: 5px;
 }
 
 div>.secondSection {
   gap: 20px;
+}
+
+.secondSection>div {
+  display: grid;
+  grid-template-columns: auto 1fr;
 }

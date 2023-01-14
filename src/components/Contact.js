@@ -16,48 +16,21 @@ export default class Contact extends Component {
     };
   }
 
-  showIcon = () => {
-    this.setState({
-      editButtonClassName: 'editButton',
-    });
-  };
-
-  hideIcon = () => {
-    this.setState({
-      editButtonClassName: 'hidden',
-    });
-  };
+  showIcon = () => this.setState({ editButtonClassName: 'editButton' });
+  hideIcon = () => this.setState({ editButtonClassName: 'hidden' });
+  changeNameInput = (e) => this.setState({ name: e.target.value });
+  changePhoneInput = (e) => this.setState({ phone: e.target.value });
+  changeEmailInput = (e) => this.setState({ email: e.target.value });
+  changeLinkedinInput = (e) => this.setState({ linkedin: e.target.value });
 
   changeEditingState = (e) => {
     e.preventDefault();
-    this.setState({
-      editing: !this.state.editing,
-    });
+    this.setState({ editing: !this.state.editing });
   };
-
-  changeNameInput = (e) =>
-    this.setState({
-      name: e.target.value,
-    });
-
-  changePhoneInput = (e) =>
-    this.setState({
-      phone: e.target.value,
-    });
-
-  changeEmailInput = (e) =>
-    this.setState({
-      email: e.target.value,
-    });
-
-  changeLinkedinInput = (e) =>
-    this.setState({
-      linkedin: e.target.value,
-    });
 
   render() {
     return this.state.editing ? (
-      <form id="infoContainer" onSubmit={this.changeEditingState}>
+      <form id="info" onSubmit={this.changeEditingState}>
         <div className="firstSection">
           <div className="name">
             <label htmlFor="nameInput">Name:</label>
@@ -66,44 +39,45 @@ export default class Contact extends Component {
               placeholder="Enter your name here..."
               onChange={this.changeNameInput}
               value={this.state.name}
-              required={true}
             />
           </div>
           <button type="submit" className="submitButton">
-            <img
-              className="submitButton"
-              src={submitIcon}
-              alt="create account button"
-            />
+            <img src={submitIcon} alt="create account" />
           </button>
         </div>
         <div className="secondSection">
-          <label htmlFor="phoneInput">Phone Number:</label>
-          <input
-            id="phoneInput"
-            placeholder="Phone here..."
-            onChange={this.changePhoneInput}
-            value={this.state.phone}
-          />
-          <label htmlFor="emailInput">Email:</label>
-          <input
-            id="emailInput"
-            placeholder="Email here..."
-            onChange={this.changeEmailInput}
-            value={this.state.email}
-          />
-          <label htmlFor="linkedinInput">LinkedIn:</label>
-          <input
-            id="linkedinInput"
-            placeholder="LinkedIn here..."
-            onChange={this.changeLinkedinInput}
-            value={this.state.linkedin}
-          />
+          <div>
+            <label htmlFor="phoneInput">Phone:</label>
+            <input
+              id="phoneInput"
+              placeholder="Phone Number here..."
+              onChange={this.changePhoneInput}
+              value={this.state.phone}
+            />
+          </div>
+          <div>
+            <label htmlFor="emailInput">Email:</label>
+            <input
+              id="emailInput"
+              placeholder="Email here..."
+              onChange={this.changeEmailInput}
+              value={this.state.email}
+            />
+          </div>
+          <div>
+            <label htmlFor="linkedinInput">LinkedIn:</label>
+            <input
+              id="linkedinInput"
+              placeholder="LinkedIn here..."
+              onChange={this.changeLinkedinInput}
+              value={this.state.linkedin}
+            />{' '}
+          </div>
         </div>
       </form>
     ) : (
       <div
-        id="infoContainer"
+        id="info"
         onMouseEnter={this.showIcon}
         onMouseLeave={this.hideIcon}
       >

@@ -11,45 +11,34 @@ export default class Skills extends Component {
     super(props);
     this.state = {
       editing: true,
+      categoryClass: 'hidden',
+      hoverStatus: false,
+      editButtonClassName: 'hidden',
       category: { name: '', contents: '', id: uniqid(), trash: false },
       categories: [
         { name: 'Skills', contents: '', id: uniqid(), trash: false },
         { name: 'Languages', contents: '', id: uniqid(), trash: false },
         { name: 'Interests', contents: '', id: uniqid(), trash: false },
       ],
-      categoryClass: 'hidden',
-      hoverStatus: 'hidden',
-      editButtonClassName: 'hidden',
     };
   }
 
-  showAddNew = () => this.setState({ hoverStatus: 'addNew' });
-  hideAddNew = () => this.setState({ hoverStatus: 'hidden' });
+  showHoverEls = () => this.setState({ hoverStatus: true });
+  hideHoverEls = () => this.setState({ hoverStatus: false });
   showCatForm = () => this.setState({ categoryClass: '' });
   hideCategoryForm = () => this.setState({ categoryClass: 'hidden' });
   getFormIcon = () => (this.state.editing ? submitIcon : editIcon);
   getNameId = (name) => name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');
 
-  showTrashIcon = (id) => {
-    setTimeout(() => {
-      const categoryIndex = this.state.categories.findIndex(
-        (el) => el.id === id,
-      );
-      const category = { ...this.state.categories[categoryIndex] };
-      category.trash = true;
+  editIconStatus = () =>
+    !this.state.hoverStatus && !this.state.editing ? 'hidden' : 'submitButton';
 
-      const start = this.state.categories.slice(0, categoryIndex);
-      const end = this.state.categories.slice(categoryIndex + 1);
-      const newCategoriesArray = [...start, category, ...end];
-
-      this.setState({ categories: newCategoriesArray });
-    }, 0);
-  };
-
-  hideTrashIcon = (id) => {
+  showTrashIcon = (id) => setTimeout(() => this.trashIconChangeState(id), 0);
+  hideTrashIcon = (id) => this.trashIconChangeState(id);
+  trashIconChangeState = (id) => {
     const categoryIndex = this.state.categories.findIndex((el) => el.id === id);
     const category = { ...this.state.categories[categoryIndex] };
-    category.trash = false;
+    category.trash = !category.trash;
 
     const start = this.state.categories.slice(0, categoryIndex);
     const end = this.state.categories.slice(categoryIndex + 1);
@@ -105,14 +94,14 @@ export default class Skills extends Component {
   };
 
   render() {
-    const { categoryClass, category, categories } = this.state;
+    const { categoryClass, category, categories, hoverStatus } = this.state;
     return (
-      <div onMouseEnter={this.showAddNew} onMouseLeave={this.hideAddNew}>
-        <div className="firstSection">
-          <div className="header">
+      <div onMouseEnter={this.showHoverEls} onMouseLeave={this.hideHoverEls}>
+        <div className="firstSection header">
+          <div className="headerTitle">
             <div>Skills & Languages</div>
             <button
-              className={this.state.hoverStatus}
+              className={hoverStatus ? 'addNew' : 'hidden'}
               onClick={this.showCatForm}
             >
               <img src={plusIcon} alt="plus icon" />
@@ -121,7 +110,7 @@ export default class Skills extends Component {
           </div>
           <label
             htmlFor="submitBtnLabel"
-            className="submitButton"
+            className={this.editIconStatus()}
             onClick={this.changeEditingState}
           >
             <img
@@ -185,7 +174,7 @@ export default class Skills extends Component {
                   <div
                     key={id}
                     id={nameId}
-                    className='categoryRow'
+                    className="categoryRow"
                     onMouseEnter={() => this.showTrashIcon(id)}
                     onMouseLeave={() => this.hideTrashIcon(id)}
                   >
