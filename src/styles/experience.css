@@ -1,34 +1,100 @@
 .experience {
-  margin: 10px 0px;
   display: flex;
+  gap: 5px;
   flex-direction: column;
+  margin-top: 5px;
 }
 
-.content {
+.jobRow {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto auto auto;
+
 }
 
-.description {
-  grid-column: 1 / -1;
+.jobHeader {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.company {
+  font-size: 18px;
+}
+
+.responsibilities {
+  grid-column: 1 / 4;
   margin: 0px 0px 25px 20px;
   font-size: 15px;
 }
 
+/* Icons n stuff */
 hr {
   width: 100%;
 }
 
 .dates {
   text-align: right;
+  align-self: end;
 }
 
-.content-info {
+.trashIconExp {
+  width: 27px;
+  height: 27px;
+  margin-left: 10px;
+  grid-row: 1 / 3;
+  grid-column: 3 / -1;
+}
+
+/* From Stuff */
+.jobRowForm {
+  background-color: rgb(65, 65, 65);
+  padding: 10px 10px 6px 10px;
+  border-radius: 4px;
+}
+
+.firstFormSection {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 5px;
+  margin-bottom: 2px;
 }
 
-.content {
+.companyForm {
+  grid-template-columns: 1 / -1;
+  grid-row: 2;
+}
+
+.experienceContainer {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.experienceContainer>div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.responsibilitiesForm {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+}
+
+.responsibilityForm {
+  width: 100%;
+}
+
+.liInput {
+  width: 100%;
+  word-break: break-all;
+  height: 24px;
+  width: 676;
+}
+
+input {
+  word-break: break-word;
 }

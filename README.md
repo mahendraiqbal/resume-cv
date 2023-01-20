@@ -1,14 +1,11 @@
 # Cv Project
 
-Next
+When I revisit
 
-- education
-
-Eventually
-
-- if enter and empty just ignore
-- make actual container more responsive to content size ie add a second page?? like responsive that way
-- contact section needs grid edited - see preview
 - clean up jsx + css
+- if enter and empty just ignore
 - try to extract components
 - add option to auto fill sample data (chat gpt to generate)
+- date formatting
+- editing experience responsibility -> break if too long
+- order things by date

@@ -3,8 +3,10 @@ import '../styles/education.css';
 import plusIcon from '../assets/plus.svg';
 import submitIcon from '../assets/checkbox-marked.svg';
 import editIcon from '../assets/account-edit.svg';
-import trashIcon from '../assets/delete.svg';
 import uniqid from 'uniqid';
+import EmptyEduForm from './utils/edu/EmptyEduForm';
+import EduPreview from './utils/edu/EduPreview';
+import ExistingEduForms from './utils/edu/ExistingEduForms';
 
 export default class Education extends Component {
   constructor(props) {
@@ -260,16 +262,14 @@ export default class Education extends Component {
   };
 
   render() {
-    const { hoverStatus, schools, formClass } = this.state;
-    const { institution, college, dates, degrees, coursework, activities } =
-      this.state.school;
+    const { editing, hoverStatus } = this.state;
     return (
       <div onMouseEnter={this.showHoverEls} onMouseLeave={this.hideHoverEls}>
         <div className="firstSection header">
           <div className="headerTitle">
             <div>Education</div>
             <button
-              className={hoverStatus ? 'addNew' : 'hidden'}
+              className={hoverStatus && editing ? 'addNew' : 'hidden'}
               onClick={this.showForm}
             >
               <img src={plusIcon} alt="plus icon" />
@@ -277,7 +277,6 @@ export default class Education extends Component {
             </button>
           </div>
           <label
-            htmlFor="submitBtnLabel"
             className={this.editIconStatus()}
             onClick={this.changeEditingState}
           >
@@ -291,173 +290,39 @@ export default class Education extends Component {
         <hr />
         {this.state.editing ? (
           <div className="educationContainer">
-            {schools.map((school) => {
-              const {
-                institution,
-                college,
-                dates,
-                degrees,
-                coursework,
-                activities,
-                id,
-                trash,
-              } = school;
-              return (
-                <form
-                  className="schoolRowForm shadow"
-                  key={id}
-                  id={id}
-                  onMouseEnter={() => this.showTrashIcon(id)}
-                  onMouseLeave={() => this.hideTrashIcon(id)}
-                  onSubmit={(e) => e.preventDefault()}
-                  onSubmitCapture={() => {
-                    if ('activeElement' in document)
-                      document.activeElement.blur();
-                  }}
-                >
-                  <div className="firstFormSection">
-                    <input
-                      className="institution"
-                      value={institution}
-                      placeholder="Institution..."
-                      onChange={(e) => this.editInstitutionInput(e, id)}
-                    />
-                    <input
-                      className="college"
-                      value={college}
-                      placeholder="College Name..."
-                      onChange={(e) => this.editCollegeInput(e, id)}
-                    />
-                    <button
-                      className={trash ? 'trashIconEdu' : 'hidden'}
-                      onClick={() => this.deleteSchool(id)}
-                      type="button"
-                    >
-                      <img src={trashIcon} alt="Trash Icon" />
-                    </button>
-                  </div>
-                  <input
-                    className="datesForm"
-                    value={dates}
-                    placeholder="Dates Attended..."
-                    onChange={(e) => this.editDatesInput(e, id)}
-                  />
-                  <input
-                    className="degreesForm"
-                    value={degrees}
-                    placeholder="Degrees Earned..."
-                    onChange={(e) => this.editDegreesInput(e, id)}
-                  />
-                  <input
-                    className="coursesForm"
-                    value={coursework}
-                    placeholder="Relevant Courses..."
-                    onChange={(e) => this.editCourseworkInput(e, id)}
-                  />
-                  <input
-                    className="activitiesForm"
-                    value={activities}
-                    placeholder="Relevant Activities and Societies..."
-                    onChange={(e) => this.editActivitiesInput(e, id)}
-                  />
-                  <button type="submit" className="hidden" />
-                </form>
-              );
-            })}
-            <form className={formClass} onSubmit={this.submitForm}>
-              <div className="firstFormSection">
-                <input
-                  className="institutionForm"
-                  value={institution}
-                  placeholder="Institution..."
-                  onChange={this.changeInstitutionInput}
-                />
-                <input
-                  className="collegeForm"
-                  value={college}
-                  placeholder="College Name..."
-                  onChange={this.changeCollegeInput}
-                />
-              </div>
-              <input
-                className="datesForm"
-                value={dates}
-                placeholder="Dates Attended..."
-                onChange={this.changeDatesInput}
-              />
-              <input
-                className="degreesForm"
-                value={degrees}
-                placeholder="Degrees Earned..."
-                onChange={this.changeDegreesInput}
-              />
-              <input
-                className="coursesForm"
-                value={coursework}
-                placeholder="Relevant Courses..."
-                onChange={this.changeCourseworkInput}
-              />
-              <input
-                className="activitiesForm"
-                value={activities}
-                placeholder="Relevant Activities and Societies..."
-                onChange={this.changeActivitiesInput}
-              />
-              <button type="submit" className="hidden" />
-            </form>
+            <ExistingEduForms
+              schools={this.state.schools}
+              showTrashIcon={this.showTrashIcon}
+              hideTrashIcon={this.hideTrashIcon}
+              deleteSchool={this.deleteSchool}
+              formClass={this.state.formClass}
+              submitForm={this.submitForm}
+              editInstitutionInput={this.changeInstitutionInput}
+              editCollegeInput={this.editCollegeInput}
+              editDatesInput={this.editDatesInput}
+              editDegreesInput={this.editDegreesInput}
+              editCourseworkInput={this.editCourseworkInput}
+              editActivitiesInput={this.editActivitiesInput}
+            />
+            <EmptyEduForm
+              school={this.state.school}
+              formClass={this.state.formClass}
+              submitForm={this.submitForm}
+              changeInstitutionInput={this.changeInstitutionInput}
+              changeCollegeInput={this.changeCollegeInput}
+              changeDatesInput={this.changeDatesInput}
+              changeDegreesInput={this.changeDegreesInput}
+              changeCourseworkInput={this.changeCourseworkInput}
+              changeActivitiesInput={this.changeActivitiesInput}
+            />
           </div>
         ) : (
-          <div className="educationContainer">
-            {schools.map((school) => {
-              const {
-                institution,
-                college,
-                dates,
-                degrees,
-                coursework,
-                activities,
-                id,
-                trash,
-              } = school;
-              return (
-                <div
-                  className="schoolRow"
-                  key={id}
-                  id={id}
-                  onMouseEnter={() => this.showTrashIcon(id)}
-                  onMouseLeave={() => this.hideTrashIcon(id)}
-                >
-                  <div className="schoolHeader">
-                    {institution && (
-                      <div className="schoolName">
-                        <strong>
-                          {institution}, {college}
-                        </strong>
-                      </div>
-                    )}
-                    {dates && <div className="dates">{dates}</div>}
-                  </div>
-                  <button
-                    className={trash ? 'trashIconEdu' : 'hidden'}
-                    onClick={() => this.deleteSchool(id)}
-                  >
-                    <img src={trashIcon} alt="Trash Icon" />
-                  </button>
-                  {degrees && <div className="degrees">{degrees}</div>}
-                  {coursework && (
-                    <div className="courses">
-                      Relevant Coursework: {coursework}
-                    </div>
-                  )}
-                  {activities && (
-                    <div className="activities">
-                      Activities and Societies: {activities}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <EduPreview
+            schools={this.state.schools}
+            showTrashIcon={this.showTrashIcon}
+            hideTrashIcon={this.hideTrashIcon}
+            deleteSchool={this.deleteSchool}
+          />
         )}
       </div>
     );

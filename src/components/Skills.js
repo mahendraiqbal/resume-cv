@@ -5,6 +5,7 @@ import submitIcon from '../assets/checkbox-marked.svg';
 import editIcon from '../assets/account-edit.svg';
 import trashIcon from '../assets/delete.svg';
 import uniqid from 'uniqid';
+import SkillsPreview from './utils/skills/SkillsPreview';
 
 export default class Skills extends Component {
   constructor(props) {
@@ -16,9 +17,24 @@ export default class Skills extends Component {
       editButtonClassName: 'hidden',
       category: { name: '', contents: '', id: uniqid(), trash: false },
       categories: [
-        { name: 'Skills', contents: '', id: uniqid(), trash: false },
-        { name: 'Languages', contents: '', id: uniqid(), trash: false },
-        { name: 'Interests', contents: '', id: uniqid(), trash: false },
+        {
+          name: 'Skills',
+          contents: 'React, NodeJs, Typescript, Next.js ,Figma',
+          id: uniqid(),
+          trash: false,
+        },
+        {
+          name: 'Languages',
+          contents: 'Spanish (conversational) & English (Native)',
+          id: uniqid(),
+          trash: false,
+        },
+        {
+          name: 'Interests',
+          contents: 'Hockey, Country Music, Car Camping, Skiing, Backpacking',
+          id: uniqid(),
+          trash: false,
+        },
       ],
     };
   }
@@ -27,10 +43,10 @@ export default class Skills extends Component {
   hideHoverEls = () => this.setState({ hoverStatus: false });
   showCatForm = () => this.setState({ categoryClass: '' });
   hideCategoryForm = () => this.setState({ categoryClass: 'hidden' });
-  getFormIcon = () => (this.state.editing ? submitIcon : editIcon);
+  getFormIconSkills = () => (this.state.editing ? submitIcon : editIcon);
   getNameId = (name) => name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');
 
-  editIconStatus = () =>
+  editIconStatusSkills = () =>
     !this.state.hoverStatus && !this.state.editing ? 'hidden' : 'submitButton';
 
   showTrashIcon = (id) => setTimeout(() => this.trashIconChangeState(id), 0);
@@ -64,7 +80,7 @@ export default class Skills extends Component {
     });
   };
 
-  changeCategoryInput = (e) => {
+  changeCategoryInput = (e) =>
     this.setState({
       category: {
         name: e.target.value,
@@ -73,13 +89,11 @@ export default class Skills extends Component {
         trashIcon: this.state.category.trash,
       },
     });
-  };
 
-  deleteCategory = (id) => {
+  deleteCategory = (id) =>
     this.setState({
       categories: this.state.categories.filter((cat) => cat.id !== id),
     });
-  };
 
   changeCustomFieldInput = (e, id) => {
     const categoryIndex = this.state.categories.findIndex((el) => el.id === id);
@@ -94,14 +108,15 @@ export default class Skills extends Component {
   };
 
   render() {
-    const { categoryClass, category, categories, hoverStatus } = this.state;
+    const { categoryClass, category, categories, hoverStatus, editing } =
+      this.state;
     return (
       <div onMouseEnter={this.showHoverEls} onMouseLeave={this.hideHoverEls}>
         <div className="firstSection header">
           <div className="headerTitle">
             <div>Skills & Languages</div>
             <button
-              className={hoverStatus ? 'addNew' : 'hidden'}
+              className={hoverStatus && editing ? 'addNew' : 'hidden'}
               onClick={this.showCatForm}
             >
               <img src={plusIcon} alt="plus icon" />
@@ -110,20 +125,24 @@ export default class Skills extends Component {
           </div>
           <label
             htmlFor="submitBtnLabel"
-            className={this.editIconStatus()}
+            className={this.editIconStatusSkills()}
             onClick={this.changeEditingState}
           >
             <img
               className="submitButton"
-              src={this.getFormIcon()}
+              src={this.getFormIconSkills()}
               alt="submit skills form"
             />
           </label>
         </div>
         <hr />
-        {this.state.editing ? (
+        {editing ? (
           <div className="skillsContain">
-            <form onSubmit={this.changeEditingState} id="skillForm">
+            <form
+              onSubmit={this.changeEditingState}
+              id="skillForm"
+              className="shadow"
+            >
               {categories.map((category) => {
                 const { name, id, contents, trash } = category;
                 const nameId = this.getNameId(name);
@@ -165,33 +184,13 @@ export default class Skills extends Component {
             </form>
           </div>
         ) : (
-          <div className="skillsContent">
-            {categories.map((category) => {
-              const { name, id, contents, trash } = category;
-              const nameId = this.getNameId(name);
-              return (
-                category.contents && (
-                  <div
-                    key={id}
-                    id={nameId}
-                    className="categoryRow"
-                    onMouseEnter={() => this.showTrashIcon(id)}
-                    onMouseLeave={() => this.hideTrashIcon(id)}
-                  >
-                    <div>
-                      {name}: {contents}
-                    </div>
-                    <button
-                      className={trash ? 'trashIcon' : 'hidden'}
-                      onClick={() => this.deleteCategory(id)}
-                    >
-                      <img src={trashIcon} alt="Trash Icon" />
-                    </button>
-                  </div>
-                )
-              );
-            })}
-          </div>
+          <SkillsPreview
+            categories={categories}
+            deleteCategory={this.deleteCategory}
+            showTrashIcon={this.showTrashIcon}
+            hideTrashIcon={this.hideTrashIcon}
+            getNameId={this.getNameId}
+          />
         )}
       </div>
     );
