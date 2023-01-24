@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../styles/contact.css';
+import '../../../styles/education.css';
 
 export default function EmptyEduForm(props) {
   const { institution, college, dates, degrees, coursework, activities } =

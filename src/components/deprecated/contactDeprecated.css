@@ -1,0 +1,52 @@
+#info,
+.card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.card {
+  background-color: rgb(65, 65, 65);
+  padding: 4px 10px 6px 10px;
+  border-radius: 4px;
+}
+
+.firstSectionContact {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.name {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+}
+
+.name>*,
+.name {
+  font-size: 30px;
+}
+
+.submitButton,
+.submitButton>img,
+.editButton,
+.editButton>img {
+  height: 32px;
+  justify-self: end;
+  align-self: center;
+}
+
+.secondSection>div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 5px;
+}
+
+.secondSectionPreview {
+  display: flex;
+  gap: 15px;
+} 
+
+/* align-items: center;
+preview stuff */

@@ -1,34 +1,30 @@
-#info,
-.card {
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-  margin-bottom: 20px;
-}
-
-.card {
-  background-color: rgb(65, 65, 65);
-  padding: 4px 10px 6px 10px;
-  border-radius: 4px;
-}
-
-.firstSectionContact {
-  width: 100%;
+/* Form */
+.contactForm {
   display: grid;
   grid-template-columns: 1fr auto;
+  width: 100%;
 }
 
-.name {
+.nameForm {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 10px;
 }
 
-.name>*,
-.name {
+.nameForm>* {
   font-size: 30px;
 }
 
+.phoneForm,
+.emailForm,
+.linkedinForm {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 5px;
+}
+
+/* EDIT */
 .submitButton,
 .submitButton>img,
 .editButton,
@@ -38,14 +34,21 @@
   align-self: center;
 }
 
-.secondSection>div {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 5px;
+/* Preview */
+.contactPreview {
+  display: flex;
+  flex-direction: column;
 }
 
-/* preview stuff */
-.secondSectionPreview {
+.firstContactPreviewRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+.name {
+  font-size: 30px;
+}
+
+.secondContactPreviewRow {
   display: flex;
   gap: 15px;
 }

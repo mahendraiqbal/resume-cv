@@ -1,52 +1,69 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import '../styles/contact.css';
-import ContactPreview from './utils/contact/ContactPreview';
-import ContactForm from './utils/contact/ContactForm';
+import useFormInput from './utils/useFormInput';
+import previewIcon from '../assets/checkbox-marked.svg';
+import editIcon from '../assets/account-edit.svg';
 
-export default class Contact extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editing: true,
-      name: 'John Watters',
-      phone: '(954) 494 - 9167',
-      email: 'jack.watters@me.com',
-      linkedin: 'https://www.linkedin.com/in/john-watters/',
-    };
-  }
+const Contact = () => {
+  const name = useFormInput();
+  const phone = useFormInput();
+  const email = useFormInput();
+  const linkedin = useFormInput();
 
-  changeNameInput = (e) => this.setState({ name: e.target.value });
-  changePhoneInput = (e) => this.setState({ phone: e.target.value });
-  changeEmailInput = (e) => this.setState({ email: e.target.value });
-  changeLinkedinInput = (e) => this.setState({ linkedin: e.target.value });
+  const [editing, setEditing] = useState(true);
+  const toggleEditHandler = () => setEditing(!editing);
 
-  changeEditingState = (e) => {
-    e.preventDefault();
-    this.setState({ editing: !this.state.editing });
-  };
+  const [editBtnClass, setEditBtnClass] = useState('hidden');
+  const showEditBtnHandler = () => setEditBtnClass('editButton');
+  const hideEditBtnHandler = () => setEditBtnClass('hidden');
 
-  render() {
-    const { name, phone, email, linkedin } = this.state;
-    return this.state.editing ? (
-      <ContactForm
-        name={name}
-        phone={phone}
-        email={email}
-        linkedin={linkedin}
-        changeEditingState={this.changeEditingState}
-        changeNameInput={this.changeNameInput}
-        changePhoneInput={this.changePhoneInput}
-        changeEmailInput={this.changeEmailInput}
-        changeLinkedinInput={this.changeLinkedinInput}
-      />
-    ) : (
-      <ContactPreview
-        name={name}
-        phone={phone}
-        email={email}
-        linkedin={linkedin}
-        changeEditingState={this.changeEditingState}
-      />
-    );
-  }
-}
+  return editing ? (
+    <form className="contactForm section edit" onSubmit={toggleEditHandler}>
+      <row className="nameForm">
+        <label htmlFor="nameInput">Name:</label>
+        <input id="nameInput" placeholder="Empty..." {...name} />
+      </row>
+      <button type="submit" className="submitButton">
+        <img src={previewIcon} alt="Preview Contact Section" />
+      </button>
+      <row className="phoneForm">
+        <label htmlFor="phoneInput">Phone:</label>
+        <input id="phoneInput" placeholder="Empty..." {...phone} />
+      </row>
+      <row className="emailForm">
+        <label htmlFor="emailInput">Email:</label>
+        <input id="emailInput" placeholder="Empty..." {...email} />
+      </row>
+      <row className="linkedinForm">
+        <label htmlFor="linkedinInput">LinkedIn:</label>
+        <input id="linkedinInput" placeholder="Empty..." {...linkedin} />
+      </row>
+    </form>
+  ) : (
+    <section
+      className="section contactPreview"
+      onMouseEnter={showEditBtnHandler}
+      onMouseLeave={hideEditBtnHandler}
+    >
+      <row className="firstContactPreviewRow">
+        {name.value && <div className="name">{name.value}</div>}
+        <img
+          className={editBtnClass}
+          src={editIcon}
+          alt="Edit Contact Section"
+          onClick={toggleEditHandler}
+        />
+      </row>
+      <row className="secondContactPreviewRow">
+        {phone.value && <div className="phone">{phone.value}</div>}
+        {phone.value && email.value && <pipe>|</pipe>}
+        {email.value && <div className="email">{email.value}</div>}
+        {((email.value && linkedin.value) ||
+          (phone.value && linkedin.value)) && <pipe>|</pipe>}
+        {linkedin.value && <div className="linkedin">{linkedin.value}</div>}
+      </row>
+    </section>
+  );
+};
+
+export default Contact;
