@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../styles/skills.css';
+import '../../../styles/skillsDeprecated.css';
 import trashIcon from '../../../assets/delete.svg';
 
 export default function SkillsPreview(props) {

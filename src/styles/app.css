@@ -52,7 +52,7 @@ img {
   cursor: pointer;
 }
 
-img:hover {
+img:hover, button:hover {
   background-color: rgba(255, 255, 255, 0.055);
   border-radius: 4px;
 }
@@ -95,18 +95,18 @@ img:hover {
 }
 
 /* Section Header Stuff */
-.header {
+/* .header {
   height: 32px;
-}
+} */
 
-.headerTitle,
+/* .headerTitle,
 .headerTitle>div {
   text-align: left;
   font-size: 18px;
   display: flex;
   align-items: center;
   gap: 10px;
-}
+} */
 
 .addNew {
   margin-top: 3px;

@@ -1,0 +1,42 @@
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 32px auto;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.sectionName {
+  font-size: 18px;
+}
+
+.addNewButton {
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  width: fit-content;
+  padding: 1px 5px 1px 1px;
+  margin: 4px 0 0 10px;
+}
+
+.addNewText {
+  color: rgba(255, 255, 255, 0.282);
+}
+
+.plusIcon {
+  height: 20px;
+}
+
+hr {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.editLabel {
+  height: 32px;
+  grid-column: 3;
+}
+
+.editLabel>img {
+  height: 32px;
+}
