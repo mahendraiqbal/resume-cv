@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/contact.css';
-import useFormInput from './utils/useFormInput';
+import useFormInput from './utils/customHooks/useFormInput';
 import previewIcon from '../assets/checkbox-marked.svg';
 import editIcon from '../assets/account-edit.svg';
 

@@ -3,7 +3,7 @@
   grid-template-columns: auto 1fr auto;
   grid-template-rows: 32px auto;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .sectionName {

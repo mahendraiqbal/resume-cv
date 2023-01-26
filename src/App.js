@@ -8,7 +8,7 @@ import Contact from './components/Contact';
 import Skills from './components/Skills';
 
 const App = () => (
-  <containerBig className="splitScreen">
+  <containerbig className="splitScreen">
     <column className="container shadow">
       {/* <ContactDeprecated /> */}
       <Education />
@@ -19,7 +19,7 @@ const App = () => (
       <Contact />
       <Skills />
     </container>
-  </containerBig>
+  </containerbig>
 );
 
 export default App;

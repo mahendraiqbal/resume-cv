@@ -1,16 +1,13 @@
 # Cv Project
 
-After
-
-- check out other people versions
-
 NOW
 
-- extract tradsh cans and header stuff
+- clean up actual jsx + CSS
 
-When I revisit
+After Functional Components
 
 - clean up jsx + css (remove shadow class)
+- figure out this dumbass trash icon thing
 - if enter and empty just ignore
 - try to extract components
 - add option to auto fill sample data (chat gpt to generate)
@@ -18,4 +15,5 @@ When I revisit
 - editing experience responsibility -> break if too long
 - order things by date
 - lifecycle method to match document title with users name
-- autofill like the chrome and fireforx one is ugly as shit
+- autofill like the chrome and firefox one is ugly as shit
+- check out other people versions
