@@ -1,357 +1,294 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../styles/experience.css';
-import ExperienceContent from './utils/exp/ExperienceContent';
-import plusIcon from '../assets/plus.svg';
-import submitIcon from '../assets/checkbox-marked.svg';
-import editIcon from '../assets/account-edit.svg';
-import uniqid from 'uniqid';
-import ExperienceForm from './utils/exp/ExperienceForm';
-import EmptyExpForm from './utils/exp/EmptyExpForm';
+import Header from './utils/smolComponents/Header';
+import DeleteButton from './utils/smolComponents/DeleteButton';
+import defaultUser from '../helperFuncs/defaultUser';
+import useToggleStatus from './utils/customHooks/useToggleStatus';
+import useNestedFormState from './utils/customHooks/useNestedFormState';
+import useObjFormState from './utils/customHooks/useObjFormState';
+import emptyFormData from '../helperFuncs/emptyFormData';
 
-export default class Experience extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hoverStatus: false,
-      editingExp: true,
-      formClass: 'hidden',
-      job: {
-        title: '',
-        company: '',
-        dates: '',
-        responsibility: { id: uniqid(), text: '' },
-        responsibilities: [],
-        id: uniqid(),
-        trash: false,
-      },
-      jobs: [
-        {
-          title: 'CEO',
-          company: 'Notion',
-          dates: 'August 2018–May 2022',
-          responsibility: { id: uniqid(), text: '' },
-          responsibilities: [
-            {
-              id: uniqid(),
-              text: "Developed a comprehensive 'CRM' to manage customer,course, and employee data in Notion using a series of relational databases combined with a no-code automation software (Make).",
-            },
-            {
-              id: uniqid(),
-              text: 'Headed the transition to a new learning management system and website. Includes redevelopment of course and website content as well as the introduction of new integrations with Stripe.',
-            },
-            {
-              id: uniqid(),
-              text: 'Collaborated with management and edu teams to ensure client and instructor satisfaction during trial periods with potential LAW (Language At Work) Clients.',
-            },
-          ],
-          id: uniqid(),
-          trash: false,
-        },
-      ],
-    };
-  }
+const Experience = () => {
+  const [editing, toggleEditHandler] = useToggleStatus(true);
 
-  showHoverEls = () => this.setState({ hoverStatus: true });
-  hideHoverEls = () => this.setState({ hoverStatus: false });
-  showForm = () => this.setState({ formClass: 'jobRowForm shadow' });
-  hideForm = () => this.setState({ formClass: 'hidden' });
-  getFormIcon = () => (this.state.editingExp ? submitIcon : editIcon);
-  getNameId = (name) => name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');
-  changeEditingState = () =>
-    this.setState({ editingExp: !this.state.editingExp });
-  editIconStatus = () =>
-    !this.state.hoverStatus && !this.state.editingExp
-      ? 'hidden'
-      : 'submitButton';
+  const [hoverStatus, handleToggleHover] = useToggleStatus(false);
 
-  showTrashIcon = (id) => setTimeout(() => this.trashIconChangeState(id), 0);
-  hideTrashIcon = (id) => this.trashIconChangeState(id);
-  trashIconChangeState = (id) => {
-    const jobIndex = this.state.jobs.findIndex((job) => job.id === id);
-    const job = { ...this.state.jobs[jobIndex] };
-    job.trash = !job.trash;
+  const [formDisplayStatus, handleFormDisplay] = useToggleStatus(false);
+  const getFormClass = () => (formDisplayStatus ? 'schoolRowForm' : 'hidden');
 
-    const start = this.state.jobs.slice(0, jobIndex);
-    const end = this.state.jobs.slice(jobIndex + 1);
-    const newJobsArray = [...start, job, ...end];
+  const [job, handleJobChange, handleSubmitForm, setJob] = useObjFormState(
+    emptyFormData.job,
+  );
 
-    this.setState({ jobs: newJobsArray });
+  const [
+    jobs,
+    setJobs,
+    handleDeleteJob,
+    handleJobsChange,
+    handleToggleTrashIcon,
+  ] = useNestedFormState(defaultUser.jobs);
+
+  const findElementInArr = (elementId, arr) => {
+    const index = arr.findIndex((el) => el.id === elementId);
+    return [arr[index], index];
   };
 
-  deleteJob = (id) =>
-    this.setState({ jobs: this.state.jobs.filter((job) => job.id !== id) });
+  const reinsertChangedEl = (changedElement, arr, index) => [
+    ...arr.slice(0, index),
+    changedElement,
+    ...arr.slice(index + 1),
+  ];
 
-  submitEmptyResponsibility = () => {
-    const { responsibilities, responsibility } = this.state.job;
-    this.setState({
-      job: {
-        title: this.state.job.title,
-        company: this.state.job.company,
-        dates: this.state.job.dates,
-        responsibilities: responsibilities.concat(responsibility),
-        responsibility: { id: uniqid(), text: '' },
-        id: this.state.job.id,
-        trash: this.state.job.trash,
-      },
-    });
-  };
+  const handleExistingRespChangeExstJob = (e, jobId, respId) => {
+    const [job, jobIndex] = findElementInArr(jobId, jobs);
+    const { responsibilities } = job;
 
-  editEmptyResponsibility = (e, respId) => {
-    const { responsibilities } = this.state.job;
-    const respIndex = responsibilities.findIndex((resp) => resp.id === respId);
-    const resp = { ...responsibilities[respIndex] };
+    const [resp, respIndex] = findElementInArr(respId, responsibilities);
     resp.text = e.target.value;
 
-    const start = responsibilities.slice(0, respIndex);
-    const end = this.state.jobs.slice(respIndex + 1);
-    const newRespArray = [...start, resp, ...end];
-
-    this.setState({
-      job: {
-        title: this.state.job.title,
-        company: this.state.job.company,
-        dates: this.state.job.dates,
-        responsibility: {
-          id: this.state.job.responsibility.id,
-          text: this.state.job.responsibility.text,
-        },
-        responsibilities: newRespArray,
-        id: this.state.job.id,
-        trash: this.state.job.trash,
-      },
-    });
+    job.responsibilities = reinsertChangedEl(resp, responsibilities, respIndex);
+    setJobs(reinsertChangedEl(job, jobs, jobIndex));
   };
 
-  changeResponsibility = (e, jobId) => {
-    const jobIndex = this.state.jobs.findIndex((job) => job.id === jobId);
-    const job = { ...this.state.jobs[jobIndex] };
+  const handleNewRespChangeExstJob = (e, jobId) => {
+    const [job, jobIndex] = findElementInArr(jobId, jobs);
     job.responsibility.text = e.target.value;
-
-    const start = this.state.jobs.slice(0, jobIndex);
-    const end = this.state.jobs.slice(jobIndex + 1);
-    const newJobsArray = [...start, job, ...end];
-
-    this.setState({ jobs: newJobsArray });
+    setJobs(reinsertChangedEl(job, jobs, jobIndex));
   };
 
-  submitResponsibility = (jobId) => {
-    const jobIndex = this.state.jobs.findIndex((job) => job.id === jobId);
-    const job = { ...this.state.jobs[jobIndex] };
+  const handleSubmitRespExstJob = (jobId) => {
+    const [job, jobIndex] = findElementInArr(jobId, jobs);
     job.responsibilities = job.responsibilities.concat(job.responsibility);
-    job.responsibility = { id: uniqid(), text: '' };
+    job.responsibility = emptyFormData.responsibility;
 
-    const start = this.state.jobs.slice(0, jobIndex);
-    const end = this.state.jobs.slice(jobIndex + 1);
-    const newJobsArray = [...start, job, ...end];
-
-    this.setState({ jobs: newJobsArray });
+    setJobs(reinsertChangedEl(job, jobs, jobIndex));
   };
 
-  editResponsibility = (e, jobId, respId) => {
-    const jobIndex = this.state.jobs.findIndex((job) => job.id === jobId);
-    const job = { ...this.state.jobs[jobIndex] };
-    const responsibilities = { job };
-
-    const respIndex = responsibilities.findIndex((resp) => resp.id === respId);
-    const resp = { ...responsibilities[respIndex] };
+  const handleExistingRespChangeNewJob = (e, respId) => {
+    const { responsibilities } = job;
+    const [resp, respIndex] = findElementInArr(respId, responsibilities);
     resp.text = e.target.value;
-    const respStart = responsibilities.slice(0, jobIndex);
-    const respEnd = responsibilities.slice(jobIndex + 1);
-    const newResp = [...respStart, resp, ...respEnd];
 
-    job.responsibilities = newResp;
-    const start = this.state.jobs.slice(0, jobIndex);
-    const end = this.state.jobs.slice(jobIndex + 1);
-    const newJobsArray = [...start, job, ...end];
-
-    this.setState({ jobs: newJobsArray });
+    const newRespArr = reinsertChangedEl(resp, responsibilities, respIndex);
+    setJob({ ...job, responsibilities: newRespArr });
   };
 
-  submitForm = (e) => {
-    e.preventDefault();
-    this.hideForm();
-    this.setState({
-      jobs: this.state.jobs.concat(this.state.job),
-      job: {
-        title: '',
-        company: '',
-        dates: '',
-        responsibility: '',
-        responsibilities: [],
-        id: uniqid(),
-        trash: false,
-      },
+  const handleNewRespChangeNewJob = (e) => {
+    setJob({
+      ...job,
+      responsibility: { ...job.responsibility, text: e.target.value },
     });
   };
 
-  changeTitleInput = (e) => {
-    this.setState({
-      job: {
-        title: e.target.value,
-        company: this.state.job.company,
-        dates: this.state.job.dates,
-        responsibility: this.state.job.responsibility,
-        responsibilities: this.state.job.responsibilities,
-        id: this.state.job.id,
-        trash: this.state.job.trash,
-      },
-    });
-  };
-  changeCompanyInput = (e) => {
-    this.setState({
-      job: {
-        title: this.state.job.title,
-        company: e.target.value,
-        dates: this.state.job.dates,
-        responsibility: this.state.job.responsibility,
-        responsibilities: this.state.job.responsibilities,
-        id: this.state.job.id,
-        trash: this.state.job.trash,
-      },
-    });
-  };
-  changeDatesInput = (e) => {
-    this.setState({
-      job: {
-        title: this.state.job.title,
-        company: this.state.job.company,
-        dates: e.target.value,
-        responsibility: this.state.job.responsibility,
-        responsibilities: this.state.job.responsibilities,
-        id: this.state.job.id,
-        trash: this.state.job.trash,
-      },
-    });
-  };
-  changeResponsibilityInput = (e) => {
-    this.setState({
-      job: {
-        title: this.state.job.title,
-        company: this.state.job.company,
-        dates: this.state.job.dates,
-        responsibility: {
-          id: this.state.job.responsibility.id,
-          text: e.target.value,
-        },
-        responsibilities: this.state.job.responsibilities,
-        id: this.state.job.id,
-        trash: this.state.job.trash,
-      },
+  const handleSubmitRespNewJob = () => {
+    setJob({
+      ...job,
+      responsibilities: job.responsibilities.concat(job.responsibility),
+      responsibility: emptyFormData.responsibility,
     });
   };
 
-  editTitleInput = (e, id) => {
-    const jobIndex = this.state.jobs.findIndex((job) => job.id === id);
-    const job = { ...this.state.jobs[jobIndex] };
-    job.title = e.target.value;
-
-    const start = this.state.jobs.slice(0, jobIndex);
-    const end = this.state.jobs.slice(jobIndex + 1);
-    const newJobsArray = [...start, job, ...end];
-
-    this.setState({ jobs: newJobsArray });
-  };
-  editCompanyInput = (e, id) => {
-    const jobIndex = this.state.jobs.findIndex((job) => job.id === id);
-    const job = { ...this.state.jobs[jobIndex] };
-    job.company = e.target.value;
-
-    const start = this.state.jobs.slice(0, jobIndex);
-    const end = this.state.jobs.slice(jobIndex + 1);
-    const newJobsArray = [...start, job, ...end];
-
-    this.setState({ jobs: newJobsArray });
-  };
-  editDatesInput = (e, id) => {
-    const jobIndex = this.state.jobs.findIndex((job) => job.id === id);
-    const job = { ...this.state.jobs[jobIndex] };
-    job.dates = e.target.value;
-
-    const start = this.state.jobs.slice(0, jobIndex);
-    const end = this.state.jobs.slice(jobIndex + 1);
-    const newJobsArray = [...start, job, ...end];
-
-    this.setState({ jobs: newJobsArray });
-  };
-  editResponsibilityInput = (e, id) => {
-    const jobIndex = this.state.jobs.findIndex((job) => job.id === id);
-    const job = { ...this.state.jobs[jobIndex] };
-    job.responsibility = {
-      id: this.state.job.responsibility.id,
-      text: e.target.value,
-    };
-
-    const start = this.state.jobs.slice(0, jobIndex);
-    const end = this.state.jobs.slice(jobIndex + 1);
-    const newJobsArray = [...start, job, ...end];
-
-    this.setState({ jobs: newJobsArray });
-  };
-
-  render() {
-    const { hoverStatus, jobs, job, editingExp: editing } = this.state;
-    return (
-      <div onMouseEnter={this.showHoverEls} onMouseLeave={this.hideHoverEls}>
-        <div className="firstSection header">
-          <div className="headerTitle">
-            <div>Experience</div>
-            <button
-              className={hoverStatus && editing ? 'addNew' : 'hidden'}
-              onClick={this.showForm}
-            >
-              <img src={plusIcon} alt="plus icon" />
-              Add New
-            </button>
-          </div>
-          <label
-            className={this.editIconStatus()}
-            onClick={this.changeEditingState}
+  return (
+    <section onMouseEnter={handleToggleHover} onMouseLeave={handleToggleHover}>
+      <Header
+        name="Experience"
+        formId="experienceFormSubmit"
+        editing={editing}
+        hoverStatus={hoverStatus}
+        toggleEditHandler={toggleEditHandler}
+        toggleFormDisplayStatusHandler={handleFormDisplay}
+      />
+      {editing ? (
+        <div className="section">
+          {jobs.map((job) => {
+            const {
+              title,
+              company,
+              id,
+              trash,
+              responsibilities,
+              responsibility,
+              dates,
+            } = job;
+            return (
+              <form
+                className="jobRowForm edit section"
+                key={id}
+                onMouseEnter={() =>
+                  setTimeout(() => handleToggleTrashIcon(id), 0)
+                }
+                onMouseLeave={() => handleToggleTrashIcon(id)}
+                onSubmit={(e) => e.preventDefault()}
+                onSubmitCapture={() => {
+                  if ('activeElement' in document)
+                    document.activeElement.blur();
+                }}
+              >
+                <div className="firstFormSection">
+                  <input
+                    className="titleForm"
+                    name="title"
+                    value={title}
+                    placeholder="Job Title..."
+                    onChange={(e) => handleJobsChange(e, id)}
+                  />
+                  <input
+                    className="companyForm"
+                    name="company"
+                    value={company}
+                    placeholder="Company Name..."
+                    onChange={(e) => handleJobsChange(e, id)}
+                  />
+                  <DeleteButton
+                    trash={trash}
+                    id={id}
+                    delete={handleDeleteJob}
+                  />
+                </div>
+                <input
+                  className="datesForm"
+                  name="dates"
+                  value={dates}
+                  placeholder="Dates Attended..."
+                  onChange={(e) => handleJobsChange(e, id)}
+                />
+                <div>Add Responsibilities Below...</div>
+                <ul className="responsibilitiesForm">
+                  {responsibilities.map((responsibility) => (
+                    <li key={responsibility.id}>
+                      <input
+                        className="liInput"
+                        value={responsibility.text}
+                        placeholder="Responsibilitiy..."
+                        onChange={(e) =>
+                          handleExistingRespChangeExstJob(
+                            e,
+                            id,
+                            responsibility.id,
+                          )
+                        }
+                      />
+                    </li>
+                  ))}
+                  <li key={responsibility.id}>
+                    <input
+                      key="empty"
+                      className="responsibilityForm"
+                      name="responsibility.text"
+                      value={responsibility.text}
+                      placeholder="Responsibilitiy..."
+                      onChange={(e) => handleNewRespChangeExstJob(e, id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') e.target.blur();
+                      }}
+                      onBlur={() => handleSubmitRespExstJob(id)}
+                    />
+                  </li>
+                </ul>
+                <button
+                  type="submit"
+                  className="hidden"
+                  id="experienceFormSubmit"
+                />
+              </form>
+            );
+          })}
+          <form
+            className={`${getFormClass()} edit section`}
+            onSubmit={(e) =>
+              handleSubmitForm(e, handleFormDisplay, setJobs, jobs)
+            }
+            onSubmitCapture={() => {
+              if ('activeElement' in document) document.activeElement.blur();
+            }}
           >
-            <img
-              className="submitButton"
-              src={this.getFormIcon()}
-              alt="submit skills form"
+            <div className="firstFormSection">
+              <input
+                className="titleForm"
+                value={job.title}
+                name="title"
+                placeholder="Job Title..."
+                onChange={handleJobChange}
+              />
+              <input
+                className="companyForm"
+                value={job.company}
+                name="company"
+                placeholder="Company Name..."
+                onChange={handleJobChange}
+              />
+            </div>
+            <input
+              className="datesForm"
+              value={job.dates}
+              name="dates"
+              placeholder="Dates Attended..."
+              onChange={handleJobChange}
             />
-          </label>
+            <div>Add Responsibilities Below...</div>
+            <ul className="responsibilitiesForm">
+              {job.responsibilities &&
+                job.responsibilities.map((responsibility) => (
+                  <li key={responsibility.id}>
+                    <input
+                      className="liInput"
+                      value={responsibility.text}
+                      placeholder="Responsibilitiy..."
+                      onChange={(e) =>
+                        handleExistingRespChangeNewJob(e, responsibility.id)
+                      }
+                    />
+                  </li>
+                ))}
+
+              <li key={job.responsibility.id}>
+                <input
+                  className="responsibilityForm"
+                  value={job.responsibility.text}
+                  placeholder="Responsibilitiy..."
+                  onChange={handleNewRespChangeNewJob}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') e.target.blur();
+                  }}
+                  onBlur={handleSubmitRespNewJob}
+                />
+              </li>
+            </ul>
+            <button type="submit" className="hidden" />
+          </form>
         </div>
-        <hr />
-        {editing ? (
-          <div className="experienceContainer">
-            <ExperienceForm
-              jobs={jobs}
-              showTrashIcon={this.showTrashIcon}
-              hideTrashIcon={this.hideTrashIcon}
-              deleteJob={this.deleteJob}
-              editTitleInput={this.editTitleInput}
-              editCompanyInput={this.editCompanyInput}
-              editDatesInput={this.editDatesInput}
-              editResponsibilityInput={this.editResponsibilityInput}
-              changeResponsibility={this.changeResponsibility}
-              editResponsibility={this.editResponsibility}
-              submitResponsibility={this.submitResponsibility}
-            />
-            <EmptyExpForm
-              className="experience"
-              job={job}
-              changeTitleInput={this.changeTitleInput}
-              changeCompanyInput={this.changeCompanyInput}
-              changeDatesInput={this.changeDatesInput}
-              changeResponsibilityInput={this.changeResponsibilityInput}
-              submitForm={this.submitForm}
-              formClass={this.state.formClass}
-              submitEmptyResponsibility={this.submitEmptyResponsibility}
-              editEmptyResponsibility={this.editEmptyResponsibility}
-            />
-          </div>
-        ) : (
-          <ExperienceContent
-            jobs={jobs}
-            showTrashIcon={this.showTrashIcon}
-            hideTrashIcon={this.hideTrashIcon}
-            deleteJob={this.deleteJob}
-          />
-        )}
-      </div>
-    );
-  }
-}
+      ) : (
+        <div className="experience">
+          {jobs.map((job) => {
+            const { title, company, id, trash, responsibilities, dates } = job;
+            return (
+              <div
+                className="jobRow"
+                key={id}
+                onMouseEnter={() =>
+                  setTimeout(() => handleToggleTrashIcon(id), 0)
+                }
+                onMouseLeave={() => handleToggleTrashIcon(id)}
+              >
+                <div className="jobHeader">
+                  {title && company && (
+                    <div className="job company">{`${title} | ${company}`}</div>
+                  )}
+                  {dates && <div className="dates">{dates}</div>}
+                </div>
+                <DeleteButton trash={trash} id={id} delete={handleDeleteJob} />
+                <ul className="responsibilities">
+                  {responsibilities.map((responsibility) => (
+                    <li key={responsibility.id}>{responsibility.text}</li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+};
+
+export default Experience;

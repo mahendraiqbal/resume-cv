@@ -17,6 +17,8 @@
   width: fit-content;
   padding: 1px 5px 1px 1px;
   margin: 4px 0 0 10px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.282);
 }
 
 .addNewText {
@@ -25,11 +27,7 @@
 
 .plusIcon {
   height: 20px;
-}
-
-hr {
-  width: 100%;
-  grid-column: 1 / -1;
+  width: 16px;
 }
 
 .editLabel {
@@ -38,5 +36,17 @@ hr {
 }
 
 .editLabel>img {
+  height: 32px;
+}
+
+.trashIcon,
+.trashIcon>img {
+  width: 20px;
+}
+
+.submitButton,
+.submitButton>img,
+.editButton,
+.editButton>img {
   height: 32px;
 }

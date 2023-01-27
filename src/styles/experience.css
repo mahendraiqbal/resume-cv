@@ -17,10 +17,6 @@
   grid-template-columns: 1fr auto;
 }
 
-.company {
-  font-size: 18px;
-}
-
 .responsibilities {
   grid-column: 1 / 4;
   margin: 0px 0px 25px 20px;
@@ -35,14 +31,6 @@ hr {
 .dates {
   text-align: right;
   align-self: end;
-}
-
-.trashIconExp {
-  width: 27px;
-  height: 27px;
-  margin-left: 10px;
-  grid-row: 1 / 3;
-  grid-column: 3 / -1;
 }
 
 /* From Stuff */
@@ -61,7 +49,7 @@ hr {
 }
 
 .companyForm {
-  grid-template-columns: 1 / -1;
+  grid-template-columns: 1 / -2;
   grid-row: 2;
 }
 
@@ -97,4 +85,8 @@ hr {
 
 input {
   word-break: break-word;
+}
+
+.job {
+  font-weight: 600;
 }

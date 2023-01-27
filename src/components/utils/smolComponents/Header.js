@@ -1,8 +1,8 @@
 import AddNewButton from './AddNewButton';
 import ChangeEditingButton from './ChangeEditingButton';
-import previewIcon from '../../assets/checkbox-marked.svg';
-import editIcon from '../../assets/account-edit.svg';
-import '../../styles/header.css';
+import previewIcon from '../../../assets/checkbox-marked.svg';
+import editIcon from '../../../assets/account-edit.svg';
+import '../../../styles/header.css';
 
 const Header = (props) => {
   const getEditIconStatusHandler = () =>
@@ -24,7 +24,7 @@ const Header = (props) => {
         getEditIconSrcHandler={getEditIconSrcHandler}
         getEditIconStatusHandler={getEditIconStatusHandler}
         toggleEditHandler={props.toggleEditHandler}
-        htmlFor={props.formId} // TODO
+        htmlFor={props.formId} // TODO need to do this for each section
       />
       <hr />
     </header>

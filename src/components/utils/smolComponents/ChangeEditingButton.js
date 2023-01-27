@@ -1,5 +1,4 @@
-import '../../styles/header.css';
-import '../../styles/header.css';
+import '../../../styles/header.css';
 
 const changeEditingButton = (props) => {
   return (

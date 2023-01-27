@@ -1,5 +1,5 @@
-import plusIcon from '../../assets/plus.svg';
-import '../../styles/header.css';
+import plusIcon from '../../../assets/plus.svg';
+import '../../../styles/header.css';
 
 const AddNewButton = (props) => {
   return (

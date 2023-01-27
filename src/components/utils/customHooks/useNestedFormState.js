@@ -5,11 +5,17 @@ const useNestedFormState = (initial) => {
 
   const handleDelete = (id) => setValue(value.filter((el) => el.id !== id));
 
-  const handleChange = (e, id, target) => {
+  const handleChange = (e, id) => {
     const index = value.findIndex((el) => el.id === id);
     const element = { ...value[index] };
 
-    element[target] = e.target.value;
+    // if (e.target.name.includes('.')) {
+    //   const [name, nestedName] = e.target.name.split('.');
+    //   element[name][nestedName] = e.target.value;
+    // }
+    //  else element[e.target.name] = e.target.value;
+
+    element[e.target.name] = e.target.value;
 
     const start = value.slice(0, index);
     const end = value.slice(index + 1);

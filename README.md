@@ -1,19 +1,13 @@
 # Cv Project
 
-NOW
-
-- clean up actual jsx + CSS
-
-After Functional Components
-
-- clean up jsx + css (remove shadow class)
-- figure out this dumbass trash icon thing
+- skills - trash icons
+- forms deletes on enter????
+- figure out issue with new forms
 - if enter and empty just ignore
-- try to extract components
-- add option to auto fill sample data (chat gpt to generate)
+
+Later (more form stuff then react stuff)
+
 - date formatting
 - editing experience responsibility -> break if too long
 - order things by date
-- lifecycle method to match document title with users name
-- autofill like the chrome and firefox one is ugly as shit
-- check out other people versions
+- add option to auto fill sample data (just add an autofill state)

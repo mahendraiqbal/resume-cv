@@ -1,31 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../styles/skills.css';
 import getNameId from '../helperFuncs/getNameId';
-import Header from './utils/Header';
-import uniqid from 'uniqid';
-import DeleteButton from './utils/DeleteButton';
+import Header from './utils/smolComponents/Header';
+import DeleteButton from './utils/smolComponents/DeleteButton';
 import defaultUser from '../helperFuncs/defaultUser';
 import useToggleStatus from './utils/customHooks/useToggleStatus';
 import useNestedFormState from './utils/customHooks/useNestedFormState';
+import useObjFormState from './utils/customHooks/useObjFormState';
+import emptyFormData from '../helperFuncs/emptyFormData';
 
 const Skills = () => {
   const [editing, toggleEditHandler] = useToggleStatus(true);
 
   const [hoverStatus, handleToggleHover] = useToggleStatus(false);
 
-  const [formDisplayStatus, handleFormDisplayStatus] = useToggleStatus(false);
+  const [formDisplayStatus, handleFormDisplay] = useToggleStatus(false);
   const getFormClass = () => (formDisplayStatus ? 'customCatForm' : 'hidden');
 
-  const emptyCategory = { name: '', contents: '', id: uniqid(), trash: false };
-  const [category, setCategory] = useState(emptyCategory);
-  const handleCategoryChange = (e) =>
-    setCategory({ ...category, name: e.target.value });
-  const handleSubmitCategoryForm = (e) => {
-    e.preventDefault();
-    handleFormDisplayStatus();
-    setCategories(categories.concat(category));
-    setCategory(emptyCategory);
-  };
+  const [category, handleCategoryChange, handleSubmitForm] = useObjFormState(
+    emptyFormData.category,
+  );
 
   const [
     categories,
@@ -39,11 +33,11 @@ const Skills = () => {
     <section onMouseEnter={handleToggleHover} onMouseLeave={handleToggleHover}>
       <Header
         name="Skills & Languages"
-        formId="SkillsFormSubmit"
+        formId="skillsFormSubmit"
         editing={editing}
         hoverStatus={hoverStatus}
         toggleEditHandler={toggleEditHandler}
-        toggleFormDisplayStatusHandler={handleFormDisplayStatus}
+        toggleFormDisplayStatusHandler={handleFormDisplay}
       />
       {editing ? (
         <div className="section edit">
@@ -68,7 +62,8 @@ const Skills = () => {
                       id={`${nameId}Input`}
                       className="categoryContents"
                       placeholder={`Enter ${name} here...`}
-                      onChange={(e) => handleContentsChange(e, id, 'contents')}
+                      name="contents"
+                      onChange={(e) => handleContentsChange(e, id)}
                       value={contents}
                     />
                   </div>
@@ -76,16 +71,23 @@ const Skills = () => {
                     trash={trash}
                     id={id}
                     delete={handleDeleteCategory}
+                    trashId="skillsTrash"
                   />
                 </div>
               );
             })}
             <button type="submit" id="skillsFormSubmit" className="hidden" />
           </form>
-          <form className={getFormClass()} onSubmit={handleSubmitCategoryForm}>
+          <form
+            className={getFormClass()}
+            onSubmit={(e) =>
+              handleSubmitForm(e, handleFormDisplay, setCategories, categories)
+            }
+          >
             <input
               id="newCategoryNameInput"
-              onChange={handleCategoryChange}
+              name="name"
+              onChange={(e) => handleCategoryChange(e)}
               value={category.name}
               placeholder="Enter Custom Category Name..."
             />
@@ -110,6 +112,7 @@ const Skills = () => {
                   trash={trash}
                   id={id}
                   delete={handleDeleteCategory}
+                  trashId="skillsTrash"
                 />
               </div>
             );

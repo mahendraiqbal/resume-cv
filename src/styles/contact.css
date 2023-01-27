@@ -24,16 +24,6 @@
   gap: 5px;
 }
 
-/* EDIT */
-.submitButton,
-.submitButton>img,
-.editButton,
-.editButton>img {
-  height: 32px;
-  justify-self: end;
-  align-self: center;
-}
-
 /* Preview */
 .contactPreview {
   display: flex;
@@ -42,8 +32,9 @@
 
 .firstContactPreviewRow {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr auto;
 }
+
 .name {
   font-size: 30px;
 }

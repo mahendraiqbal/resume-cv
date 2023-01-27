@@ -17,8 +17,8 @@
    grid-template-columns: 1fr auto;
  }
 
- .dates {
-   text-align: right;
+ .school {
+   font-weight: 600;
  }
 
  .trashIconEdu {
@@ -43,8 +43,7 @@
  /* Form */
  .schoolRowForm {
    background-color: rgb(65, 65, 65);
-   padding: 10px 10px 6px 10px;
-   border-radius: 4px;
+   padding: 6px 10px 4px 10px;
  }
 
  .firstFormSection {
@@ -63,12 +62,7 @@
    grid-row: 2;
  }
 
- .institutionForm,
- .collegeForm,
- .datesForm,
- .degreesForm,
- .coursesForm,
- .activitiesForm {
+ .schoolRowForm>* {
    width: 100%;
  }
 

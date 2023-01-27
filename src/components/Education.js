@@ -1,330 +1,222 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../styles/education.css';
-import plusIcon from '../assets/plus.svg';
-import submitIcon from '../assets/checkbox-marked.svg';
-import editIcon from '../assets/account-edit.svg';
-import uniqid from 'uniqid';
-import EmptyEduForm from './utils/edu/EmptyEduForm';
-import EduPreview from './utils/edu/EduPreview';
-import ExistingEduForms from './utils/edu/ExistingEduForms';
+import Header from './utils/smolComponents/Header';
+import DeleteButton from './utils/smolComponents/DeleteButton';
+import defaultUser from '../helperFuncs/defaultUser';
+import useToggleStatus from './utils/customHooks/useToggleStatus';
+import useNestedFormState from './utils/customHooks/useNestedFormState';
+import useObjFormState from './utils/customHooks/useObjFormState';
+import emptyFormData from '../helperFuncs/emptyFormData';
 
-export default class Education extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hoverStatus: false,
-      editing: true,
-      formClass: 'hidden',
-      school: {
-        institution: '',
-        college: '',
-        dates: '',
-        degrees: '',
-        coursework: '',
-        activities: '',
-        id: uniqid(),
-        trash: false,
-      },
-      schools: [
-        {
-          institution: 'University of Southern California',
-          college: 'Marshall School of Business',
-          dates: 'August 2018–May 2022',
-          degrees: [
-            'Bachelor of Science in Business Administration',
-            'Specialization in Computer Programming',
-          ],
-          coursework: [
-            'Operations Management',
-            'Database Management',
-            'Programing in Python',
-          ],
-          activities: [
-            'Sports Business Association',
-            "Men's Lacrosse Team",
-            'Pi Kappa Alpha Fraternity',
-          ],
-          id: uniqid(),
-          trash: false,
-        },
-      ],
-    };
-  }
+const Education = () => {
+  const [editing, toggleEditHandler] = useToggleStatus(true);
 
-  showHoverEls = () => this.setState({ hoverStatus: true });
-  hideHoverEls = () => this.setState({ hoverStatus: false });
-  showForm = () => this.setState({ formClass: 'schoolRowForm shadow' });
-  hideForm = () => this.setState({ formClass: 'hidden' });
-  getFormIcon = () => (this.state.editing ? submitIcon : editIcon);
-  getNameId = (name) => name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '');
-  changeEditingState = () => this.setState({ editing: !this.state.editing });
-  editIconStatus = () =>
-    !this.state.hoverStatus && !this.state.editing ? 'hidden' : 'submitButton';
+  const [hoverStatus, handleToggleHover] = useToggleStatus(false);
 
-  showTrashIcon = (id) => setTimeout(() => this.trashIconChangeState(id), 0);
-  hideTrashIcon = (id) => this.trashIconChangeState(id);
-  trashIconChangeState = (id) => {
-    const schoolIndex = this.state.schools.findIndex((el) => el.id === id);
-    const school = { ...this.state.schools[schoolIndex] };
-    school.trash = !school.trash;
+  const [formDisplayStatus, handleFormDisplay] = useToggleStatus(false);
+  const getFormClass = () => (formDisplayStatus ? 'schoolRowForm' : 'hidden');
 
-    const start = this.state.schools.slice(0, schoolIndex);
-    const end = this.state.schools.slice(schoolIndex + 1);
-    const newCategoriesArray = [...start, school, ...end];
+  const [school, handleSchoolChange, handleSubmitForm] = useObjFormState(
+    emptyFormData.school,
+  );
 
-    this.setState({ schools: newCategoriesArray });
-  };
+  const [
+    schools,
+    setSchools,
+    handleDeleteSchool,
+    handleSchoolsChange,
+    handleToggleTrashIcon,
+  ] = useNestedFormState(defaultUser.schools);
 
-  changeInstitutionInput = (e) => {
-    this.setState({
-      school: {
-        institution: e.target.value,
-        college: this.state.school.college,
-        dates: this.state.school.dates,
-        degrees: this.state.school.degrees,
-        coursework: this.state.school.coursework,
-        activities: this.state.school.activities,
-        id: this.state.school.id,
-        trash: this.state.school.trash,
-      },
-    });
-  };
-
-  changeCollegeInput = (e) => {
-    this.setState({
-      school: {
-        institution: this.state.school.institution,
-        college: e.target.value,
-        dates: this.state.school.dates,
-        degrees: this.state.school.degrees,
-        coursework: this.state.school.coursework,
-        activities: this.state.school.activities,
-        id: this.state.school.id,
-        trash: this.state.school.trash,
-      },
-    });
-  };
-
-  changeDatesInput = (e) => {
-    this.setState({
-      school: {
-        institution: this.state.school.institution,
-        college: this.state.school.college,
-        dates: e.target.value,
-        degrees: this.state.school.degrees,
-        coursework: this.state.school.coursework,
-        activities: this.state.school.activities,
-        id: this.state.school.id,
-        trash: this.state.school.trash,
-      },
-    });
-  };
-
-  changeDegreesInput = (e) => {
-    this.setState({
-      school: {
-        institution: this.state.school.institution,
-        college: this.state.school.college,
-        dates: this.state.school.dates,
-        degrees: e.target.value,
-        coursework: this.state.school.coursework,
-        activities: this.state.school.activities,
-        id: this.state.school.id,
-        trash: this.state.school.trash,
-      },
-    });
-  };
-
-  changeCourseworkInput = (e) => {
-    this.setState({
-      school: {
-        institution: this.state.school.institution,
-        college: this.state.school.college,
-        dates: this.state.school.dates,
-        degrees: this.state.school.degrees,
-        coursework: e.target.value,
-        activities: this.state.school.activities,
-        id: this.state.school.id,
-        trash: this.state.school.trash,
-      },
-    });
-  };
-
-  changeActivitiesInput = (e) => {
-    this.setState({
-      school: {
-        institution: this.state.school.institution,
-        college: this.state.school.college,
-        dates: this.state.school.dates,
-        degrees: this.state.school.degrees,
-        coursework: this.state.school.coursework,
-        activities: e.target.value,
-        id: this.state.school.id,
-        trash: this.state.school.trash,
-      },
-    });
-  };
-
-  editInstitutionInput = (e, id) => {
-    const schoolIndex = this.state.schools.findIndex((el) => el.id === id);
-    const school = { ...this.state.schools[schoolIndex] };
-    school.institution = e.target.value;
-
-    const start = this.state.schools.slice(0, schoolIndex);
-    const end = this.state.schools.slice(schoolIndex + 1);
-    const newCategoriesArray = [...start, school, ...end];
-
-    this.setState({ schools: newCategoriesArray });
-    console.log(this.state.schools);
-  };
-
-  editCollegeInput = (e, id) => {
-    const schoolIndex = this.state.schools.findIndex((el) => el.id === id);
-    const school = { ...this.state.schools[schoolIndex] };
-    school.college = e.target.value;
-
-    const start = this.state.schools.slice(0, schoolIndex);
-    const end = this.state.schools.slice(schoolIndex + 1);
-    const newCategoriesArray = [...start, school, ...end];
-
-    this.setState({ schools: newCategoriesArray });
-  };
-
-  editDatesInput = (e, id) => {
-    const schoolIndex = this.state.schools.findIndex((el) => el.id === id);
-    const school = { ...this.state.schools[schoolIndex] };
-    school.dates = e.target.value;
-
-    const start = this.state.schools.slice(0, schoolIndex);
-    const end = this.state.schools.slice(schoolIndex + 1);
-    const newCategoriesArray = [...start, school, ...end];
-
-    this.setState({ schools: newCategoriesArray });
-  };
-
-  editDegreesInput = (e, id) => {
-    const schoolIndex = this.state.schools.findIndex((el) => el.id === id);
-    const school = { ...this.state.schools[schoolIndex] };
-    school.degrees = e.target.value;
-
-    const start = this.state.schools.slice(0, schoolIndex);
-    const end = this.state.schools.slice(schoolIndex + 1);
-    const newCategoriesArray = [...start, school, ...end];
-
-    this.setState({ schools: newCategoriesArray });
-  };
-
-  editCourseworkInput = (e, id) => {
-    const schoolIndex = this.state.schools.findIndex((el) => el.id === id);
-    const school = { ...this.state.schools[schoolIndex] };
-    school.coursework = e.target.value;
-
-    const start = this.state.schools.slice(0, schoolIndex);
-    const end = this.state.schools.slice(schoolIndex + 1);
-    const newCategoriesArray = [...start, school, ...end];
-
-    this.setState({ schools: newCategoriesArray });
-  };
-
-  editActivitiesInput = (e, id) => {
-    const schoolIndex = this.state.schools.findIndex((el) => el.id === id);
-    const school = { ...this.state.schools[schoolIndex] };
-    school.activities = e.target.value;
-
-    const start = this.state.schools.slice(0, schoolIndex);
-    const end = this.state.schools.slice(schoolIndex + 1);
-    const newCategoriesArray = [...start, school, ...end];
-
-    this.setState({ schools: newCategoriesArray });
-  };
-
-  deleteSchool = (id) =>
-    this.setState({
-      schools: this.state.schools.filter((cat) => cat.id !== id),
-    });
-
-  submitForm = (e) => {
-    e.preventDefault();
-    this.hideForm();
-    this.setState({
-      schools: this.state.schools.concat(this.state.school),
-      school: {
-        institution: '',
-        college: '',
-        dates: '',
-        degrees: '',
-        coursework: '',
-        activities: '',
-        id: uniqid(),
-        trash: false,
-      },
-    });
-  };
-
-  render() {
-    const { editing, hoverStatus } = this.state;
-    return (
-      <div onMouseEnter={this.showHoverEls} onMouseLeave={this.hideHoverEls}>
-        <div className="firstSection header">
-          <div className="headerTitle">
-            <div>Education</div>
-            <button
-              className={hoverStatus && editing ? 'addNew' : 'hidden'}
-              onClick={this.showForm}
-            >
-              <img src={plusIcon} alt="plus icon" />
-              Add New
-            </button>
-          </div>
-          <label
-            className={this.editIconStatus()}
-            onClick={this.changeEditingState}
+  return (
+    <section onMouseEnter={handleToggleHover} onMouseLeave={handleToggleHover}>
+      <Header
+        name="Education"
+        formId="educationFormSubmit"
+        editing={editing}
+        hoverStatus={hoverStatus}
+        toggleEditHandler={toggleEditHandler}
+        toggleFormDisplayStatusHandler={handleFormDisplay}
+      />
+      {editing ? (
+        <div className="section ">
+          {schools.map((school) => {
+            const {
+              institution,
+              college,
+              dates,
+              degrees,
+              courses,
+              activities,
+              id,
+              trash,
+            } = school;
+            return (
+              <form
+                className="schoolRowForm edit section"
+                key={id}
+                onMouseEnter={() =>
+                  setTimeout(() => handleToggleTrashIcon(id), 0)
+                }
+                onMouseLeave={() => handleToggleTrashIcon(id)}
+                onSubmit={(e) => e.preventDefault()}
+                onSubmitCapture={() => {
+                  if ('activeElement' in document)
+                    document.activeElement.blur();
+                }}
+              >
+                <div className="firstFormSection">
+                  <input
+                    className="institution"
+                    name="institution"
+                    value={institution}
+                    placeholder="Institution..."
+                    onChange={(e) => handleSchoolsChange(e, id)}
+                  />
+                  <input
+                    className="college"
+                    name="college"
+                    value={college}
+                    placeholder="College Name..."
+                    onChange={(e) => handleSchoolsChange(e, id)}
+                  />
+                  <DeleteButton
+                    trash={trash}
+                    id={id}
+                    delete={handleDeleteSchool}
+                  />
+                </div>
+                <input
+                  className="datesForm"
+                  name="dates"
+                  value={dates}
+                  placeholder="Dates Attended..."
+                  onChange={(e) => handleSchoolsChange(e, id)}
+                />
+                <input
+                  className="degreesForm"
+                  name="degrees"
+                  value={degrees}
+                  placeholder="Degrees Earned..."
+                  onChange={(e) => handleSchoolsChange(e, id)}
+                />
+                <input
+                  className="coursesForm"
+                  name="courses"
+                  value={courses}
+                  placeholder="Relevant Courses..."
+                  onChange={(e) => handleSchoolsChange(e, id)}
+                />
+                <input
+                  className="activitiesForm"
+                  name="activities"
+                  value={activities}
+                  placeholder="Relevant Activities and Societies..."
+                  onChange={(e) => handleSchoolsChange(e, id)}
+                />
+                <button
+                  type="submit"
+                  className="hidden"
+                  id="educationFormSubmit"
+                />
+              </form>
+            );
+          })}
+          <form
+            className={`${getFormClass()} edit section`}
+            onSubmit={(e) =>
+              handleSubmitForm(e, handleFormDisplay, setSchools, schools)
+            }
+            onSubmitCapture={() => {
+              if ('activeElement' in document) document.activeElement.blur();
+            }}
           >
-            <img
-              className="submitButton"
-              src={this.getFormIcon()}
-              alt="submit form"
+            <input
+              value={school.institution}
+              name="institution"
+              placeholder="Institution..."
+              onChange={handleSchoolChange}
             />
-          </label>
+            <input
+              value={school.college}
+              name="college"
+              placeholder="College Name..."
+              onChange={handleSchoolChange}
+            />
+            <input
+              value={school.dates}
+              placeholder="Dates Attended..."
+              name="dates"
+              onChange={handleSchoolChange}
+            />
+            <input
+              value={school.degrees}
+              name="degrees"
+              placeholder="Degrees Earned..."
+              onChange={handleSchoolChange}
+            />
+            <input
+              value={school.courses}
+              name="courses"
+              placeholder="Relevant Courses..."
+              onChange={handleSchoolChange}
+            />
+            <input
+              value={school.activities}
+              name="activities"
+              placeholder="Relevant Activities and Societies..."
+              onChange={handleSchoolChange}
+            />
+            <button type="submit" className="hidden" id="educationFormSubmit" />
+          </form>
         </div>
-        <hr />
-        {this.state.editing ? (
-          <div className="educationContainer">
-            <ExistingEduForms
-              schools={this.state.schools}
-              showTrashIcon={this.showTrashIcon}
-              hideTrashIcon={this.hideTrashIcon}
-              deleteSchool={this.deleteSchool}
-              formClass={this.state.formClass}
-              submitForm={this.submitForm}
-              editInstitutionInput={this.changeInstitutionInput}
-              editCollegeInput={this.editCollegeInput}
-              editDatesInput={this.editDatesInput}
-              editDegreesInput={this.editDegreesInput}
-              editCourseworkInput={this.editCourseworkInput}
-              editActivitiesInput={this.editActivitiesInput}
-            />
-            <EmptyEduForm
-              school={this.state.school}
-              formClass={this.state.formClass}
-              submitForm={this.submitForm}
-              changeInstitutionInput={this.changeInstitutionInput}
-              changeCollegeInput={this.changeCollegeInput}
-              changeDatesInput={this.changeDatesInput}
-              changeDegreesInput={this.changeDegreesInput}
-              changeCourseworkInput={this.changeCourseworkInput}
-              changeActivitiesInput={this.changeActivitiesInput}
-            />
-          </div>
-        ) : (
-          <EduPreview
-            schools={this.state.schools}
-            showTrashIcon={this.showTrashIcon}
-            hideTrashIcon={this.hideTrashIcon}
-            deleteSchool={this.deleteSchool}
-          />
-        )}
-      </div>
-    );
-  }
-}
+      ) : (
+        <div className="educationContainer">
+          {schools.map((school) => {
+            const {
+              institution,
+              college,
+              dates,
+              degrees,
+              courses,
+              activities,
+              id,
+              trash,
+            } = school;
+            return (
+              <div
+                className="schoolRow"
+                key={id}
+                onMouseEnter={() =>
+                  setTimeout(() => handleToggleTrashIcon(id), 0)
+                }
+                onMouseLeave={() => handleToggleTrashIcon(id)}
+              >
+                <div className="schoolHeader">
+                  {institution && <div className='school'>{`${institution}, ${college}`}</div>}
+                  {dates && <div className="dates">{dates}</div>}
+                </div>
+                <DeleteButton
+                  trash={trash}
+                  id={id}
+                  delete={handleDeleteSchool}
+                />
+                {degrees && <div className="degrees">{degrees}</div>}
+                {courses && (
+                  <div className="courses">Relevant courses: {courses}</div>
+                )}
+                {activities && (
+                  <div className="activities">
+                    Activities and Societies: {activities}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+};
+
+export default Education;

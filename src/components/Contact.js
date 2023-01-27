@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/contact.css';
 import useFormInput from './utils/customHooks/useFormInput';
 import previewIcon from '../assets/checkbox-marked.svg';
 import editIcon from '../assets/account-edit.svg';
 
 const Contact = () => {
-  const name = useFormInput();
-  const phone = useFormInput();
-  const email = useFormInput();
-  const linkedin = useFormInput();
+  const name = useFormInput('');
+  const phone = useFormInput('');
+  const email = useFormInput('');
+  const linkedin = useFormInput('');
 
   const [editing, setEditing] = useState(true);
   const toggleEditHandler = () => setEditing(!editing);
@@ -17,10 +17,19 @@ const Contact = () => {
   const showEditBtnHandler = () => setEditBtnClass('editButton');
   const hideEditBtnHandler = () => setEditBtnClass('hidden');
 
+  useEffect(() => {
+    if (name.value) {
+      document.title =
+        name.value.slice(-1) === 's'
+          ? `${name.value}' Resume`
+          : `${name.value}'s Resume`;
+    }
+  }, [name]);
+
   return editing ? (
     <form className="contactForm section edit" onSubmit={toggleEditHandler}>
       <row className="nameForm">
-        <label htmlFor="nameInput">Name:</label>
+        <label htmlFor="nameInput">Name: </label>
         <input id="nameInput" placeholder="Empty..." {...name} />
       </row>
       <button type="submit" className="submitButton">
