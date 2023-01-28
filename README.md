@@ -1,9 +1,6 @@
 # Cv Project
 
 - skills - trash icons
-- forms deletes on enter????
-- figure out issue with new forms
-- if enter and empty just ignore
 
 Later (more form stuff then react stuff)
 
@@ -11,3 +8,4 @@ Later (more form stuff then react stuff)
 - editing experience responsibility -> break if too long
 - order things by date
 - add option to auto fill sample data (just add an autofill state)
+- some of the functions that use the toggle hook should probably use something that is just an explicit true/false.

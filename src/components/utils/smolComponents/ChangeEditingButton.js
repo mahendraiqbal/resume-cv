@@ -5,7 +5,7 @@ const changeEditingButton = (props) => {
     <label
       className={props.getEditIconStatusHandler()}
       htmlFor={props.htmlFor}
-      onClick={props.toggleEditHandler}
+      onClick={() => props.toggleEditHandler()}
     >
       <img src={props.getEditIconSrcHandler()} alt="Toggle Edit/Preview" />
     </label>

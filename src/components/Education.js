@@ -25,7 +25,8 @@ const Education = () => {
     setSchools,
     handleDeleteSchool,
     handleSchoolsChange,
-    handleToggleTrashIcon,
+    handleToggleTrashIconOn,
+    handleToggleTrashIconOff,
   ] = useNestedFormState(defaultUser.schools);
 
   return (
@@ -55,10 +56,8 @@ const Education = () => {
               <form
                 className="schoolRowForm edit section"
                 key={id}
-                onMouseEnter={() =>
-                  setTimeout(() => handleToggleTrashIcon(id), 0)
-                }
-                onMouseLeave={() => handleToggleTrashIcon(id)}
+                onMouseEnter={() => handleToggleTrashIconOn(id)}
+                onMouseLeave={() => handleToggleTrashIconOff(id)}
                 onSubmit={(e) => e.preventDefault()}
                 onSubmitCapture={() => {
                   if ('activeElement' in document)
@@ -187,13 +186,13 @@ const Education = () => {
               <div
                 className="schoolRow"
                 key={id}
-                onMouseEnter={() =>
-                  setTimeout(() => handleToggleTrashIcon(id), 0)
-                }
-                onMouseLeave={() => handleToggleTrashIcon(id)}
+                onMouseEnter={() => handleToggleTrashIconOn(id)}
+                onMouseLeave={() => handleToggleTrashIconOff(id)}
               >
                 <div className="schoolHeader">
-                  {institution && <div className='school'>{`${institution}, ${college}`}</div>}
+                  {institution && (
+                    <div className="school">{`${institution}, ${college}`}</div>
+                  )}
                   {dates && <div className="dates">{dates}</div>}
                 </div>
                 <DeleteButton

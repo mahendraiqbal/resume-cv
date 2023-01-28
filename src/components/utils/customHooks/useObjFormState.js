@@ -7,6 +7,7 @@ const useObjFormState = (initial) => {
     setValue({ ...value, [e.target.name]: e.target.value });
 
   const handleSubmitForm = (e, handleDisplayFunc, setValuesFunc, values) => {
+    if (!e.target.value) return;
     e.preventDefault();
     handleDisplayFunc();
     setValuesFunc(values.concat(value));

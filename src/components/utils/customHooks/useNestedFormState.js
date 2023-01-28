@@ -9,12 +9,6 @@ const useNestedFormState = (initial) => {
     const index = value.findIndex((el) => el.id === id);
     const element = { ...value[index] };
 
-    // if (e.target.name.includes('.')) {
-    //   const [name, nestedName] = e.target.name.split('.');
-    //   element[name][nestedName] = e.target.value;
-    // }
-    //  else element[e.target.name] = e.target.value;
-
     element[e.target.name] = e.target.value;
 
     const start = value.slice(0, index);
@@ -24,11 +18,27 @@ const useNestedFormState = (initial) => {
     setValue(newArray);
   };
 
-  const handleToggleIcon = (id) => {
+  const handleToggleOn = (id) => {
+    const index = value.findIndex((el) => el.id === id);
+
+    const element = { ...value[index] };
+    element.trash = true;
+
+    const start = value.slice(0, index);
+    start.forEach((el) => (el.trash = false));
+
+    const end = value.slice(index + 1);
+    end.forEach((el) => (el.trash = false));
+
+    const newArray = [...start, element, ...end];
+
+    setValue(newArray);
+  };
+
+  const handleToggleOff = (id) => {
     const index = value.findIndex((el) => el.id === id);
     const element = { ...value[index] };
-
-    element.trash = !element.trash;
+    element.trash = false;
 
     const start = value.slice(0, index);
     const end = value.slice(index + 1);
@@ -37,7 +47,14 @@ const useNestedFormState = (initial) => {
     setValue(newArray);
   };
 
-  return [value, setValue, handleDelete, handleChange, handleToggleIcon];
+  return [
+    value,
+    setValue,
+    handleDelete,
+    handleChange,
+    handleToggleOn,
+    handleToggleOff,
+  ];
 };
 
 export default useNestedFormState;

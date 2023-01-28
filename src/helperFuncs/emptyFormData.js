@@ -21,7 +21,6 @@ const emptyFormData = {
     id: uniqid(),
     trash: false,
   },
-  responsibility: { id: uniqid(), text: '' },
 };
 
 export default emptyFormData;

@@ -26,7 +26,8 @@ const Skills = () => {
     setCategories,
     handleDeleteCategory,
     handleContentsChange,
-    handleToggleTrashIcon,
+    handleToggleTrashIconOn,
+    handleToggleTrashIconOff,
   ] = useNestedFormState(defaultUser.categories);
 
   return (
@@ -41,7 +42,7 @@ const Skills = () => {
       />
       {editing ? (
         <div className="section edit">
-          <form onSubmit={toggleEditHandler} className="skillsForm ">
+          <form onSubmit={(e) => e.preventDefault()} className="skillsForm">
             {categories.map((category) => {
               const { name, id, contents, trash } = category;
               const nameId = getNameId(name);
@@ -49,10 +50,8 @@ const Skills = () => {
                 <div
                   className={`categoryRow ${nameId}`}
                   key={id}
-                  onMouseEnter={() =>
-                    setTimeout(() => handleToggleTrashIcon(id), 0)
-                  }
-                  onMouseLeave={() => handleToggleTrashIcon(id)}
+                  onMouseEnter={() => handleToggleTrashIconOn(id)}
+                  onMouseLeave={() => handleToggleTrashIconOff(id)}
                 >
                   <div className="categoryContent">
                     <label htmlFor={`${nameId}Input`} className="categoryName">
@@ -71,7 +70,6 @@ const Skills = () => {
                     trash={trash}
                     id={id}
                     delete={handleDeleteCategory}
-                    trashId="skillsTrash"
                   />
                 </div>
               );
@@ -80,9 +78,9 @@ const Skills = () => {
           </form>
           <form
             className={getFormClass()}
-            onSubmit={(e) =>
-              handleSubmitForm(e, handleFormDisplay, setCategories, categories)
-            }
+            onBlur={(e) => {
+              handleSubmitForm(e, handleFormDisplay, setCategories, categories);
+            }}
           >
             <input
               id="newCategoryNameInput"
@@ -102,17 +100,13 @@ const Skills = () => {
               <div
                 key={id}
                 className={`categoryRow ${nameId}`}
-                onMouseEnter={() =>
-                  setTimeout(() => handleToggleTrashIcon(id), 0)
-                }
-                onMouseLeave={() => handleToggleTrashIcon(id)}
-              >
+                onMouseEnter={() => handleToggleTrashIconOn(id)}
+                onMouseLeave={() => handleToggleTrashIconOff(id)}              >
                 <div>{`${name}: ${contents}`}</div>
                 <DeleteButton
                   trash={trash}
                   id={id}
                   delete={handleDeleteCategory}
-                  trashId="skillsTrash"
                 />
               </div>
             );

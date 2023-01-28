@@ -6,6 +6,7 @@ const AddNewButton = (props) => {
     <button
       className={props.getAddIconStatusHandler()}
       onClick={props.toggleFormDisplayStatusHandler}
+      type='button'
     >
       <img src={plusIcon} alt="plus icon" className="plusIcon" />
       <p className="addNewText">Add New</p>

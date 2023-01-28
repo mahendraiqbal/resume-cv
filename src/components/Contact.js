@@ -18,19 +18,23 @@ const Contact = () => {
   const hideEditBtnHandler = () => setEditBtnClass('hidden');
 
   useEffect(() => {
-    if (name.value) {
-      document.title =
-        name.value.slice(-1) === 's'
-          ? `${name.value}' Resume`
-          : `${name.value}'s Resume`;
-    }
+    if (!name.value) return;
+    document.title =
+      name.value.slice(-1) === 's'
+        ? `${name.value}' Resume`
+        : `${name.value}'s Resume`;
   }, [name]);
 
   return editing ? (
     <form className="contactForm section edit" onSubmit={toggleEditHandler}>
       <row className="nameForm">
         <label htmlFor="nameInput">Name: </label>
-        <input id="nameInput" placeholder="Empty..." {...name} />
+        <input
+          id="nameInput"
+          placeholder="Empty..."
+          {...name}
+          required={true}
+        />
       </row>
       <button type="submit" className="submitButton">
         <img src={previewIcon} alt="Preview Contact Section" />

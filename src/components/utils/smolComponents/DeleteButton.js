@@ -6,8 +6,8 @@ const DeleteButton = (props) => {
   return (
     <button
       className={trashClass}
-      id={props.trashId}
       onClick={() => props.delete(props.id)}
+      type="button"
     >
       <img src={trashIcon} alt="Trash Icon" />
     </button>

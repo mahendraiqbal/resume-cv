@@ -24,7 +24,7 @@ const Header = (props) => {
         getEditIconSrcHandler={getEditIconSrcHandler}
         getEditIconStatusHandler={getEditIconStatusHandler}
         toggleEditHandler={props.toggleEditHandler}
-        htmlFor={props.formId} // TODO need to do this for each section
+        htmlFor={props.formId} 
       />
       <hr />
     </header>

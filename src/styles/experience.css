@@ -53,6 +53,10 @@ hr {
   grid-row: 2;
 }
 
+.datesForm {
+  width: 100%;
+}
+
 .experienceContainer {
   display: flex;
   flex-direction: column;

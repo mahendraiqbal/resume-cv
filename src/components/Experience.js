@@ -7,6 +7,7 @@ import useToggleStatus from './utils/customHooks/useToggleStatus';
 import useNestedFormState from './utils/customHooks/useNestedFormState';
 import useObjFormState from './utils/customHooks/useObjFormState';
 import emptyFormData from '../helperFuncs/emptyFormData';
+import uniqid from 'uniqid';
 
 const Experience = () => {
   const [editing, toggleEditHandler] = useToggleStatus(true);
@@ -25,7 +26,8 @@ const Experience = () => {
     setJobs,
     handleDeleteJob,
     handleJobsChange,
-    handleToggleTrashIcon,
+    handleToggleTrashIconOn,
+    handleToggleTrashIconOff,
   ] = useNestedFormState(defaultUser.jobs);
 
   const findElementInArr = (elementId, arr) => {
@@ -50,6 +52,17 @@ const Experience = () => {
     setJobs(reinsertChangedEl(job, jobs, jobIndex));
   };
 
+  const handleDeleteEmptyExstRespExstJob = (e, jobId, respId) => {
+    if (e.target.value) return;
+
+    const [job, jobIndex] = findElementInArr(jobId, jobs);
+    job.responsibilities = job.responsibilities.filter(
+      (el) => el.id !== respId,
+    );
+
+    setJobs(reinsertChangedEl(job, jobs, jobIndex));
+  };
+
   const handleNewRespChangeExstJob = (e, jobId) => {
     const [job, jobIndex] = findElementInArr(jobId, jobs);
     job.responsibility.text = e.target.value;
@@ -58,8 +71,11 @@ const Experience = () => {
 
   const handleSubmitRespExstJob = (jobId) => {
     const [job, jobIndex] = findElementInArr(jobId, jobs);
+
+    if (!job.responsibility.text) return;
+
     job.responsibilities = job.responsibilities.concat(job.responsibility);
-    job.responsibility = emptyFormData.responsibility;
+    job.responsibility = { id: uniqid(), text: '' };
 
     setJobs(reinsertChangedEl(job, jobs, jobIndex));
   };
@@ -81,10 +97,11 @@ const Experience = () => {
   };
 
   const handleSubmitRespNewJob = () => {
+    if (!job.responsibility.text) return;
     setJob({
       ...job,
       responsibilities: job.responsibilities.concat(job.responsibility),
-      responsibility: emptyFormData.responsibility,
+      responsibility: { id: uniqid(), text: '' },
     });
   };
 
@@ -114,10 +131,8 @@ const Experience = () => {
               <form
                 className="jobRowForm edit section"
                 key={id}
-                onMouseEnter={() =>
-                  setTimeout(() => handleToggleTrashIcon(id), 0)
-                }
-                onMouseLeave={() => handleToggleTrashIcon(id)}
+                onMouseEnter={() => handleToggleTrashIconOn(id)}
+                onMouseLeave={() => handleToggleTrashIconOff(id)}
                 onSubmit={(e) => e.preventDefault()}
                 onSubmitCapture={() => {
                   if ('activeElement' in document)
@@ -162,6 +177,13 @@ const Experience = () => {
                         placeholder="Responsibilitiy..."
                         onChange={(e) =>
                           handleExistingRespChangeExstJob(
+                            e,
+                            id,
+                            responsibility.id,
+                          )
+                        }
+                        onBlur={(e) =>
+                          handleDeleteEmptyExstRespExstJob(
                             e,
                             id,
                             responsibility.id,
@@ -265,10 +287,8 @@ const Experience = () => {
               <div
                 className="jobRow"
                 key={id}
-                onMouseEnter={() =>
-                  setTimeout(() => handleToggleTrashIcon(id), 0)
-                }
-                onMouseLeave={() => handleToggleTrashIcon(id)}
+                onMouseEnter={() => handleToggleTrashIconOn(id)}
+                onMouseLeave={() => handleToggleTrashIconOff(id)}
               >
                 <div className="jobHeader">
                   {title && company && (

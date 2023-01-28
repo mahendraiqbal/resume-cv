@@ -17,7 +17,8 @@
   display: none;
 }
 
-#skillsTrash {
-  width: 22px;
-  height: 22px;
-}
+/* .skillsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+} */
